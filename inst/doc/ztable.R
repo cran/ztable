@@ -4,16 +4,18 @@
 ## ----,results="asis",message=FALSE---------------------------------------
 require(ztable)
 options(ztable.type="html")
+options(ztable.zebra=1)
+options(ztable.zebra.color="platinum")
 options(ztable.colnames.bold=TRUE)
-ztable(head(mtcars),caption="Table 1. Basic Use")
+ztable(head(mtcars))
 
 ## ----,results='asis'-----------------------------------------------------
 ztable(head(mtcars),zebra=NULL,size=3,
-       caption="Table 2. Non-zebra Table with small size")
+       caption="Table 1. Non-zebra Table with small size")
 
 ## ----,results='asis'-----------------------------------------------------
 ztable(head(mtcars[c(1:7)]),zebra=2,zebra.color="lightcyan",size=7,
-       caption="Table 3. Left-sided caption at botom with large font",
+       caption="Table 2. Left-sided caption at botom with large font",
        caption.placement="bottom",caption.position="l") 
 
 ## ----,results="asis"-----------------------------------------------------
@@ -56,7 +58,7 @@ group <- gl(2, 10, 20, labels = c("Ctl","Trt"))
 weight <- c(ctl, trt)
 lm.D9 <- lm(weight ~ group)
 ztable(lm.D9)
-ztable(anova(lm.D9))
+ztable(anova(lm.D9),align="|c|rrrr|r|")
 
 ## ----,results='asis'-----------------------------------------------------
 counts <- c(18,17,15,20,10,20,25,13,12)
@@ -78,5 +80,12 @@ out=coxph(TS~rx+obstruct+adhere+differ+extent+surg+node4,data=colon)
 ztable(out)
 
 ## ----,results='asis',message=FALSE---------------------------------------
-ztable(head(mtcars,15),zebra=0) 
+ztable(head(mtcars,15),zebra=0,zebra.color=NULL) 
+
+## ----,results='asis'-----------------------------------------------------
+z=ztable(head(mtcars[1:3]),tabular=TRUE,zebra.color="peach-orange")
+z1=ztable(head(iris[1:3]),tabular=TRUE,zebra=2)
+
+parallelTables(width=c(0.5,0.5),list(z,z1),type="html")
+parallelTables(width=c(0.5,0.5),list(z,"figures/ztable3.png"),type="html")
 

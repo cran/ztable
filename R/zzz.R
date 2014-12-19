@@ -4,7 +4,7 @@
 #'@param libname a character string giving the library directory where
 #'@param pkgname a character string giving the name of the package.
 .onAttach<-function(libname,pkgname){
-    packageStartupMessage("Welcome to package ztable ver 0.1.0")
+    packageStartupMessage("Welcome to package ztable ver 0.1.1")
 }
 
 .onLoad<-function(libname,pkgname){
@@ -17,8 +17,8 @@
     options(ztable.caption.placement="top")
     options(ztable.caption.position="c")
     options(ztable.caption.bold=FALSE)
-    options(ztable.booktabs=TRUE)
-    options(ztable.zebra=1)
+    options(ztable.booktabs=FALSE)
+    options(ztable.zebra=0)
     options(ztable.zebra.color=NULL)
     options(ztable.colnames.bold=FALSE)
     invisible()
