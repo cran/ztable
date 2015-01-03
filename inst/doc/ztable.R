@@ -28,11 +28,13 @@ ztable(fit)
 
 ## ----,results='asis'-----------------------------------------------------
 a=anova(fit)
+str(a)
 ztable(a)
 
 ## ----,results='asis'-----------------------------------------------------
 fit2 <- lm(mpg ~ cyl+wt, data=mtcars)
 b=anova(fit2,fit)
+str(b)
 ztable(b)
 ztable(b,show.heading=FALSE)
 
@@ -88,4 +90,46 @@ z1=ztable(head(iris[1:3]),tabular=TRUE,zebra=2)
 
 parallelTables(width=c(0.5,0.5),list(z,z1),type="html")
 parallelTables(width=c(0.5,0.5),list(z,"figures/ztable3.png"),type="html")
+
+## ----,results='asis'-----------------------------------------------------
+z1=ztable(head(iris),zebra=2)
+z1
+print(z1,zebra.type=2)
+print(z1,zebra=1,zebra.type=2,zebra.colnames=TRUE)
+
+## ----,results='asis'-----------------------------------------------------
+options(ztable.zebra.color=NULL)
+(z1=ztable(head(iris),zebra=0,zebra.type=2))
+
+## ----,results='asis'-----------------------------------------------------
+update_ztable(z1,colnames.bold=TRUE,zebra.colnames=TRUE)
+
+## ----,results='asis'-----------------------------------------------------
+print(z1,zebra.color=c(rep("white",5),"peach"),zebra.colnames=TRUE)
+
+## ----,results='asis'-----------------------------------------------------
+zlist=list(y=c(3,NA,3,6),x=c(NA,4,4,6),color=c("platinum","peach","darkchampagne","scarlet"))
+z1=update_ztable(z1,zebra.list=zlist,zebra.type=3)
+print(z1)
+
+## ----,results='asis'-----------------------------------------------------
+ztable(head(iris),zebra=0,zebra.type=0)
+ztable(head(iris),zebra=0,zebra.type=0,zebra.color=zcolors$name,zebra.colnames=TRUE)
+
+## ----,results='asis'-----------------------------------------------------
+ztable(head(iris),zebra=0,zebra.type=0,zebra.color=1:7,zebra.colnames=TRUE)
+ztable(head(mtcars[,1:9]),zebra=0,zebra.type=0,zebra.color=1:9,zebra.colnames=TRUE)
+
+## ----,results='asis'-----------------------------------------------------
+mycolor=rep("white",6)
+for(i in 1:40){
+    mycolor=c(mycolor,"white",zcolors$name[((i-1)*5+1):((i-1)*5+5)])
+}
+a=c(zcolors$name[1:5])
+for(i in 2:40){
+    a=rbind(a,zcolors$name[((i-1)*5+1):((i-1)*5+5)])
+}
+a=data.frame(a,stringsAsFactors=FALSE,row.names=NULL)
+ztable(a,zebra=0,zebra.type=0,zebra.color=mycolor,include.rownames=FALSE,
+       include.colnames=FALSE,longtable=TRUE)
 
