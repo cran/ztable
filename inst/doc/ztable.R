@@ -108,11 +108,6 @@ update_ztable(z1,colnames.bold=TRUE,zebra.colnames=TRUE)
 print(z1,zebra.color=c(rep("white",5),"peach"),zebra.colnames=TRUE)
 
 ## ----,results='asis'-----------------------------------------------------
-zlist=list(y=c(3,NA,3,6),x=c(NA,4,4,6),color=c("platinum","peach","darkchampagne","scarlet"))
-z1=update_ztable(z1,zebra.list=zlist,zebra.type=3)
-print(z1)
-
-## ----,results='asis'-----------------------------------------------------
 ztable(head(iris),zebra=0,zebra.type=0)
 ztable(head(iris),zebra=0,zebra.type=0,zebra.color=zcolors$name,zebra.colnames=TRUE)
 
@@ -132,4 +127,50 @@ for(i in 2:40){
 a=data.frame(a,stringsAsFactors=FALSE,row.names=NULL)
 ztable(a,zebra=0,zebra.type=0,zebra.color=mycolor,include.rownames=FALSE,
        include.colnames=FALSE,longtable=TRUE)
+
+## ----,results='asis'-----------------------------------------------------
+options(ztable.zebra=NULL)
+z=ztable(head(mtcars))
+z
+z=addRowColor(z,c(4,7),color="pink")
+z=addColColor(z,7,color="amber")
+z=addCellColor(z,cols=7,rows=c(4,7),color="orange")
+z
+
+## ----,results='asis'-----------------------------------------------------
+rgroup=c("Group A","Group B")
+n.rgroup=c(4,2)
+z=addrgroup(z,rgroup=rgroup,n.rgroup=n.rgroup)
+z
+z=addrgroup(z,rgroup=rgroup,n.rgroup=n.rgroup,cspan.rgroup=1)
+z=addColColor(z,7,color="amber")
+z
+
+## ----,results='asis'-----------------------------------------------------
+z=ztable(head(mtcars),digits=0)
+z=addColColor(z,10,color="platinum")
+cgroup=c("Group A","Group B","Group C")
+n.cgroup=c(3,4,4)
+cgroupcolor=c("white","white","white","platinum")
+z=addcgroup(z,cgroup=cgroup,n.cgroup=n.cgroup,cgroupcolor=cgroupcolor)
+z
+
+## ----,results='asis'-----------------------------------------------------
+z=ztable(head(iris))
+cgroup=c("Total",NA,NA)
+cgroup1=c("Group","Species",NA)
+cgroup2=c("SEPAL","PETAL","Species")
+cgroup=rbind(cgroup,cgroup1,cgroup2)
+n.cgroup=matrix(c(5,NA,NA,4,1,NA,2,2,1),byrow=TRUE,nrow=3)
+z=addcgroup(z,cgroup=cgroup,n.cgroup=n.cgroup)
+z
+
+## ----,results='asis'-----------------------------------------------------
+cgroupcolor=matrix(c("white","white","white","white","white","platinum","white","white",
+                     "white","cyan","platinum","white"),byrow=TRUE,nrow=3)
+z=addcgroup(z,cgroup=cgroup,n.cgroup=n.cgroup,cgroupcolor=cgroupcolor)
+z=addrgroup(z,rgroup=c("1to4","5to6"),n.rgroup=c(4,2),cspan.rgroup=1)
+z=addColColor(z,3,"cyan")
+z=addColColor(z,5,"platinum")
+z
 
