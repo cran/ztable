@@ -703,6 +703,25 @@ print_ztable=function(z){
     else ztable2html(z,xdata)
 }
 
+#'Subfunction used in ztable2latex
+#'
+#' @param string a character vector
+tr=function(string) {
+    string=gsub("%","\\%",string,fixed=TRUE)
+    string=gsub(" -","\\hspace{0.5cm}",string,fixed=TRUE)
+    string
+}
+
+
+#'Subfunction used in ztable2html
+#'
+#' @param string a character vector
+tr2=function(string) {
+    string=gsub(" -","&nbsp;&nbsp;&nbsp;",string,fixed=TRUE)
+    string
+}
+
+
 #' Convert data to formatted data for table
 #'
 #' @param z An object of class "ztable"
@@ -733,11 +752,14 @@ data2table=function(z){
 
     select=sapply(data,is.factor)
     data[select]=lapply(data[select],as.character)
+    #data
 
     for(i in 1:nrow){
         for(j in 1:ncount) {
             if(z$display[j+1]=="s"){
-                temp<-z$x[i,j]
+                temp=data[i,j]
+                if(z$type=="latex") temp<-tr(temp)
+                if(z$type=="html") temp<-tr2(temp)
             }
             else{
                 if(is.na(z$x[i,j])) {
@@ -746,8 +768,9 @@ data2table=function(z){
                     temp<-formatC(z$x[i,j],digits=z$digits[j+1],
                                  format=z$display[j+1])
                 }
-                data[i,j]<-temp
+
             }
+            data[i,j]<-temp
         }
     }
     data
@@ -779,8 +802,11 @@ ztable2latex=function(z,xdata){
     addrow=ifelse(z$include.rownames,1,0)
 
     NewAlign=getNewAlign(z)
+    #NewAlign=z$align
     totalCol=totalCol(z)
     colCount=colGroupCount(z)
+
+    vlines=align2lines(z$align)
 
     rgroupcount=0
     printrgroup=1
@@ -847,25 +873,67 @@ ztable2latex=function(z,xdata){
     if(is.null(z$hline.after)) cat(ifelse(z$booktabs,"\\toprule[1.2pt]\n","\\hline\n"))
     else if(-1 %in% z$hline.after) cat(ifelse(z$booktabs,"\\toprule[1.2pt]\n","\\hline\n"))
     if(!is.null(z$cgroup)) printLatexHead(z)
-        if(z$colnames.bold) firstcn=paste("\\textbf{",cn[1],"}",sep="")
+    subcolnames=ifelse(is.null(z$subcolnames),0,1)
+
+        if(subcolnames) {
+            if(is.na(z$subcolnames[1])) firstcn=paste("\\multirow{2}{*}{}",sep="")
+            else firstcn=cn[1]
+        }
         else firstcn=cn[1]
+        if(z$colnames.bold) firstcn=paste("\\textbf{",firstcn,"}",sep="")
+
         if(z$cellcolor[1,2]!="white") firstcn=paste("\\cellcolor{",z$cellcolor[1,2],"}",firstcn,sep="")
-        if(z$include.rownames) firstrow=paste("\\cellcolor{",z$cellcolor[1,1],"}","&",
-                                              firstcn,sep="")
+        if(z$include.rownames) {
+
+            result=1
+            if(!is.null(isspanCol(z,1,1)))
+                first=paste("\\multicolumn{",isspanCol(z,1,1),"}{c}{}",sep="")
+            else if(!is.null(isspanRow(z,1,1))){
+                 result=isspanRow(z,1,1)
+                 if(result>0) first=paste("\\multirow{",result,"}{*}{}",sep="")
+            } else first=""
+            if(z$cellcolor[1,1]!="white")
+                first=paste("\\cellcolor{",z$cellcolor[1,1],first,"}",sep="")
+            firstrow=paste(first,"&",firstcn,sep="")
+
+        }
         else firstrow=firstcn
+
         if(ncount>1) {
             for(i in 2:ncount) {
                 firstrow=paste(firstrow,"&",sep="")
+                if((i==2)&(!is.null(colCount))){
+                    if(1 %in% colCount[-length(colCount)]) {
+                        if(vlines[1+2]==0) firstrow=paste(firstrow,"&",sep="")
+                    }
+                }
                 if(z$cellcolor[1,i+1]!="white")
                     firstrow=paste(firstrow,"\\cellcolor{",z$cellcolor[1,i+1],"}",sep="")
                 if(z$colnames.bold) boldcn=paste("\\textbf{",cn[i],"}",sep="")
                 else boldcn=cn[i]
+                result=1
+                if(!is.null(isspanCol(z,1,(i+1)))){
+                    result=isspanCol(z,1,(i+1))
+                    if(result>0) boldcn=paste("\\multicolumn{",result,"}{c}{",boldcn,"}",sep="")
+                    else if(result==0) next
+                } else if(!is.null(isspanRow(z,1,(i+1)))){
+                    boldcn=paste("\\multirow{",isspanRow(z,1,(i+1)),"}{*}{",boldcn,"}",sep="")
+                }
+                if((subcolnames==1)) {
+                    if(is.na(z$subcolnames[i])){
+                       # boldcn=paste("\\multirow{2}{*}{",boldcn,"}",sep="")
+                        boldcn=""
+                    }
+                }
                 firstrow=paste(firstrow,boldcn,sep="")
                 if(!is.null(colCount)){
                     if(i %in% colCount[-length(colCount)]) {
-                        if(z$cellcolor[1,i+1]!="white")
-                            firstrow=paste(firstrow,"&\\cellcolor{",z$cellcolor[1,i+1],"}",sep="")
-                        else firstrow=paste(firstrow,"&",sep="")
+                        if(vlines[i+2]==0) {
+                            #if(z$cellcolor[1,i+1]!="white")
+                            #    firstrow=paste(firstrow,"&\\cellcolor{",z$cellcolor[1,i+1],"}",sep="")
+                            #else firstrow=paste(firstrow,"&",sep="")
+                            firstrow=paste(firstrow,"&",sep="")
+                        }
                     }
                 }
             }
@@ -874,61 +942,64 @@ ztable2latex=function(z,xdata){
     if((0 %in% z$prefix.rows) & !is.null(z$top.command)) cat(z$top.command)
     if(z$include.colnames) {
         cat(paste(firstrow,"\\\\ \n",sep=""))
+        if(subcolnames){
+            if(z$include.rownames) {
+                if(z$cellcolor[1,1]!="white")
+                    cat(paste("\\cellcolor{",z$cellcolor[1,1],"} &",sep=""))
+                else cat("&")
+
+            }
+            for(i in 1:length(z$subcolnames)){
+                if(is.na(z$subcolnames[i])) {
+                    temp=paste("\\multirow{-2}{*}{",colnames(z$x)[i],"}",sep="")
+                    if(!is.null(z$colcolor)){
+                        if(z$cellcolor[1,i+1]!="white")
+                            temp=paste("\\cellcolor{",z$cellcolor[1,i+1],"}",temp,sep="")
+                    }
+                    cat(temp)
+                    if(i!=length(z$subcolnames)) cat("&")
+                    if(i %in% colCount[-length(colCount)]) {
+                        if(vlines[i+2]==0){
+                            if((z$cellcolor[1,i+1]!="white") & (z$cellcolor[1,i+1]==z$cellcolor[1,i+2]))
+                                cat(paste("\\cellcolor{",z$cellcolor[1,i+1],"}&",sep=""))
+                            else cat("&")
+                        }
+                    }
+                    next
+                }
+                if(z$colnames.bold) boldcn=paste("\\textbf{",z$subcolnames[i],"}",sep="")
+                else boldcn=z$subcolnames[i]
+
+                if(z$cellcolor[1,i+1]!="white")
+                    cat(paste("\\cellcolor{",z$cellcolor[1,i+1],"}",boldcn,"&",sep=""))
+                else cat(paste(boldcn,"&",sep=""))
+                if(i %in% colCount[-length(colCount)]) {
+                    if(vlines[i+2]==0){
+                    if((z$cellcolor[1,i+1]!="white") & (z$cellcolor[1,i+1]==z$cellcolor[1,i+2]))
+                        cat(paste("\\cellcolor{",z$cellcolor[1,i+1],"}&",sep=""))
+                    else cat("&")
+                    }
+                }
+            }
+            cat("\\\\ \n")
+        }
         if(is.null(z$hline.after)) cat(ifelse(z$booktabs,"\\midrule\n","\\hline\n"))
         else if(0 %in% z$hline.after) cat(ifelse(z$booktabs,"\\midrule\n","\\hline\n"))
     }
 
     for(i in 1:nrow){
+        printcline=0
         if(rgroupcount>0) {
             if(i %in% printrgroup) {
-                if(is.null(z$cspan.rgroup)){
-                    temp=paste("\\multicolumn{",totalCol,"}{l}{",sep="")
-                    if(z$colcolor[1]!="white")
-                        temp=paste(temp,"\\cellcolor{",z$colcolor[1],"}",sep="")
-                    temp=paste(temp,"\\textbf{",z$rgroup[rgroupcount],"}}",sep="")
-                }
-                else {
-                    if(z$cspan.rgroup==1) {
-                        if(z$colcolor[1]!="white")
-                            temp=paste("\\cellcolor{",z$colcolor[1],"}",sep="")
-                        else temp=""
-                        temp=paste(temp,"\\textbf{",z$rgroup[rgroupcount],"}",sep="")
-                        for(j in 1:(ncount+addrow-1)){
-                            if(z$colcolor[j+1]!="white")
-                                temp1=paste("\\cellcolor{",z$colcolor[j+1],"}",sep="")
-                            else temp1=""
-                            temp=paste(temp,temp1,sep="&")
-                            if(!is.null(colCount)){
-                                if(j %in% colCount[-length(colCount)]) {
-                                    if(z$colcolor[j+1]!="white")
-                                        temp=paste(temp,"&\\cellcolor{",z$colcolor[j+1],"}",sep="")
-                                    else temp=paste(temp,"&",sep="")
-                                }
-                            }
-                        }
-                    } else {
-                        if(z$cspan.rgroup<1 | z$cspan.rgroup>(ncount+addrow))
-                            z$cspan.rgroup=ncount+addrow
-                        temp=paste("\\multicolumn{",z$cspan.rgroup,"}{l}{\\textbf{",
-                                   z$rgroup[rgroupcount],"}}",sep="")
-                        if(z$cspan.rgroup<(ncount+addrow)) {
-                            for(j in 1:(ncount+addrow-z$cspan.rgroup)) {
-                                if(z$colcolor[z$cspan.rgroup+j]!="white")
-                                    temp=paste(temp,"&\\cellcolor{",z$colcolor[z$cspan.rgroup+j],"}",sep="")
-                                else temp=paste(temp,"",sep="&")
-                                if(!is.null(colCount)){
-                                    if(j %in% colCount[-length(colCount)]) {
-                                        if(z$colcolor[z$cspan.rgroup+j]!="white")
-                                            temp=paste(temp,"&\\cellcolor{",z$colcolor[z$cspan.rgroup+j],"}",sep="")
-                                        else temp=paste(temp,"&",sep="")
-                                    }
-                                }
-                            }
-                        }
+                for(k in 1:length(printrgroup)){
+                    if(i == printrgroup[k]){
+                        if(is.na(z$rgroup[k])) break
+                        if(z$rgroup[k]=="") break
+                        printRowGroup(z,i)
+                        break
                     }
                 }
-                cat(paste(temp,"\\\\ \n",sep=""))
-                rgroupcount=rgroupcount+1
+
             }
         }
         if(i %in% z$prefix.rows) {
@@ -936,28 +1007,109 @@ ztable2latex=function(z,xdata){
             #   cat(paste("\\rowcolor{",z$zebra.color[i],"}",sep=""))
             if(!is.null(z$commands[i])) cat(z$commands[i])
         }
-        temp=c()
+        tempo=NULL
         if(z$include.rownames) {
-            if(z$cellcolor[i+1,1]=="white") temp=rownames(z$x)[i]
-            else temp=paste("\\cellcolor{",z$cellcolor[i+1,1],"}",
-                                          rownames(z$x)[i],sep="")
+            if(z$cellcolor[i+1,1]=="white") tempo=rownames(z$x)[i]
+            else tempo=paste("\\cellcolor{",z$cellcolor[i+1,1],"}",
+                            rownames(z$x)[i],sep="")
+
+            if(!is.null(isspanCol(z,(i+1),1)))
+                tempo=paste("\\multicolumn{",isspanCol(z,i+1,1),"}{c}{",tempo,"}",sep="")
+            else if(!is.null(isspanRow(z,(i+1),1))){
+                result=isspanRow(z,(i+1),1)
+                if(result<0) tempo=paste("\\multirow{",result,"}{*}{",tempo,"}",sep="")
+            }
+            cat(tempo)
         }
+
         for(j in 1:ncount) {
+            skip=0
             if(z$cellcolor[i+1,j+1]=="white") temp1=xdata[i,j]
             else temp1=paste("\\cellcolor{",z$cellcolor[i+1,j+1],"}",
                              xdata[i,j],sep="")
-            if(is.null(temp)) temp=temp1
-            else temp=paste(temp,"&",temp1,sep="")
-            if(!is.null(colCount)){
-                if(j %in% colCount[-length(colCount)]) {
-                    if(z$cellcolor[i+1,j+1]=="white") temp=paste(temp,"&",sep="")
-                    else temp=paste(temp,"&\\cellcolor{",z$cellcolor[i+1,j+1],"}",sep="")
+
+            if(is.null(isspanCol(z,(i+1),(j+1)))){
+                if(is.null(isspanRow(z,(i+1),(j+1)))){
+                    result=1
+
+                } else {
+                    result=isspanRow(z,(i+1),(j+1))
+                    if(result < 0) {
+                        k=getspanRowData(z,i+1,j+1)
+                        if(z$cellcolor[i+1,j+1]=="white") temp2=xdata[k+1,j]
+                        else temp2=paste("\\cellcolor{",z$cellcolor[i+1,j+1],"}",
+                                         xdata[k-1,j],sep="")
+                        temp1=paste("\\multirow{",result,"}{*}{",temp2,"}",sep="")
+                    }
+                    else {
+                        skip=1
+                        result=0 #
+                        if(z$cellcolor[i+1,j+1]=="white") skipcolor=""
+                        else skipcolor=paste("\\cellcolor{",z$cellcolor[i+1,j+1],"}",sep="")
+                    }
 
                 }
+
+                if(j %in% colCount[-length(colCount)]) {
+                    if(vlines[j+2]==0) {
+                        backcolor=NULL
+                        if(!is.null(z$rowcolor)){
+                            if(z$rowcolor[i+1]!="white") backcolor=z$rowcolor[i+1]
+                        }
+                        if(is.null(backcolor)){
+                            if((z$cellcolor[i+1,j+1]!="white")&(z$cellcolor[i+1,j+1]==z$cellcolor[i+1,j+2]))
+                               backcolor=z$cellcolor[i+1,j+1]
+                        }
+                        if(is.null(backcolor)) temp1=paste(temp1,"&",sep="")
+                        else temp1=paste(temp1,"&\\cellcolor{",backcolor,"}",sep="")
+                        #temp1=paste(temp1,"&",sep="")
+                    }
+                }
+
+            } else {
+                result=isspanCol(z,(i+1),(j+1))
+                if(result>0) {
+                    width=spanColWidth(z,(i+1),(j+1))
+                    mcalign="c"
+                    mclinecount=vlines[j+width+1]
+                    if(mclinecount > 0) {
+                        for(k in 1:mclinecount)
+                            mcalign=paste(mcalign,"|",sep="")
+                    }
+                    temp1=paste("\\multicolumn{",result,"}{",mcalign,"}{",temp1,"}",sep="")
+                    if(isGroupCol(j,result,colCount))
+                        if(vlines[j+width+1]==0)
+                            #if((j+result)<ncol(z$x))
+                                temp1=paste(temp1,"&",sep="")
+                    #if((j+result-1) %in% colCount[-length(colCount)])
+                    #    if(vlines[j+result+1]==0) temp1=paste(temp1,"&",sep="")
+                }
+                else next
+            }
+            #browser()
+            if(is.null(tempo)) {
+                cat(temp1)
+                tempo=temp1
+            }
+            else {
+                if(result!=0) cat(paste("&",temp1,sep=""))
+                else if(skip) cat(paste("&",skipcolor,sep=""))
             }
 
+            if(!is.null(colCount)){
+                count=j
+                if(!is.null(isspanCol(z,i+1,j+1))){
+                    result=isspanCol(z,(i+1),(j+1))
+                    if(result>0) count=count+result
+                }
+                #if(count %in% colCount[-length(colCount)]) {
+                    #if(vlines[count+2]==0) cat("&")
+                    #if(z$cellcolor[i+1,j+1]=="white") cat("&")
+                    #else cat(paste("&\\cellcolor{",z$cellcolor[i+1,j+1],"}",sep=""))
+                #}
+            }
         }
-        cat(paste(temp,"\\\\ \n",sep=""))
+        cat(paste("\\\\ \n",sep=""))
         if(i %in% z$hline.after)
             cat(ifelse(z$booktabs,ifelse(i==nrow,"\\bottomrule[1.2pt]\n","\\midrule"),"\\hline\n"))
     }
@@ -992,6 +1144,150 @@ ztable2latex=function(z,xdata){
         }
     }
     cat("\\color{black}\n")
+}
+
+
+#' Print Row Groups in a latex table
+#'
+#' @param z An object of class ztable
+#' @param i An integer indicating row
+printRowGroup=function(z,i){
+
+    ncount=ncol(z$x)
+    nrow=nrow(z$x)
+    cn=colnames(z$x)
+    addrow=ifelse(z$include.rownames,1,0)
+
+    NewAlign=getNewAlign(z)
+    totalCol=totalCol(z)
+    colCount=colGroupCount(z)
+
+    vlines=align2lines(z$align)
+
+    printrgroup=1
+    if(!is.null(z$n.rgroup)){
+        if(length(z$n.rgroup)>1) {
+            for(j in 2:length(z$n.rgroup)) {
+                printrgroup=c(printrgroup,printrgroup[length(printrgroup)]+z$n.rgroup[j-1])
+            }
+        }
+    }
+    printrgroup
+    printcline=0
+    rgroupcount=0
+
+    for(k in 1:length(printrgroup)){
+        if(i == printrgroup[k]){
+            rgroupcount=k
+            break
+        }
+    }
+
+if(i %in% printrgroup) {
+    if(is.null(z$cspan.rgroup)){
+        if(i>1) cat(paste("\\cline{1-",totalCol,"}\n",sep=""))
+        vlines=align2lines(NewAlign)
+        #mcalign=substr(extractAlign(NewAlign),start=1,stop=1)
+        mcalign="l"
+        if(vlines[1]>0)
+            for(k in 1:vlines[1]) mcalign=paste("|",mcalign,sep="")
+        if(vlines[totalCol+1]>0)
+            for(k in 1:vlines[totalCol+1]) mcalign=paste(mcalign,"|",sep="")
+        temp=paste("\\multicolumn{",totalCol,"}{",mcalign,"}{",sep="")
+        if(z$colcolor[1]!="white")
+            temp=paste(temp,"\\cellcolor{",z$colcolor[1],"}",sep="")
+        temp=paste(temp,"\\textbf{",z$rgroup[rgroupcount],"}}",sep="")
+        printcline=totalCol
+    }
+    else {
+        if(z$cspan.rgroup==1) {
+            if(z$colcolor[1]!="white")
+                temp=paste("\\cellcolor{",z$colcolor[1],"}",sep="")
+            else temp=""
+            temp=paste(temp,"\\textbf{",z$rgroup[rgroupcount],"}",sep="")
+            for(j in 1:(ncount+addrow-1)){
+                temp1=""
+                if(z$colcolor[j+1]!="white")
+                    temp1=paste("\\cellcolor{",z$colcolor[j+1],"}",sep="")
+                else {
+                    if(!is.null(isspanRow(z,i+1,j+1))){
+                        #cat("i=",i,",j=",j,"isspanRow(z,i,j+1)=",isspanRow(z,i+1,j+1),"\n")
+                        if(isspanRow(z,i+1,j+1)<=0) {
+                            #for(k in 1:nrow(z$spanRow)) {
+                            #    if(z$spanRow[k,1]!=j+1) next
+                            #    if(z$spanRow[k,2]>=i+1) next
+                            #    if(z$spanRow[k,3]==i+1) break
+                            #}
+                            temp1=paste("\\cellcolor{",z$cellcolor[i+1,j+1],"}",sep="")
+                        }
+                    }
+                    else temp1=""
+                }
+                temp=paste(temp,temp1,sep="&")
+                if(!is.null(colCount)){
+                    if(j %in% colCount[-length(colCount)]) {
+                        if(vlines[j+2]==0) {
+                            #if(z$colcolor[j+1]!="white")
+                            #    temp=paste(temp,"&\\cellcolor{",z$colcolor[j+1],"}",sep="")
+                            #else temp=paste(temp,"&",sep="")
+                            temp=paste(temp,"&",sep="")
+                        }
+                    }
+                }
+            }
+        } else {
+            if(z$cspan.rgroup<1 | z$cspan.rgroup>(ncount+addrow))
+                z$cspan.rgroup=ncount+addrow
+            printcline=z$cspan.rgroup
+            nvlines=align2lines(NewAlign)
+            #mcalign=substr(extractAlign(NewAlign),start=1,stop=1)
+            mcalign="l"
+            if(nvlines[1]>0)
+                for(k in 1:vlines[1]) mcalign=paste("|",mcalign,sep="")
+            if(nvlines[printcline+1]>0)
+                for(k in 1:nvlines[printcline+1]) mcalign=paste(mcalign,"|",sep="")
+            temp=paste("\\multicolumn{",z$cspan.rgroup,"}{",mcalign,"}{\\textbf{",
+                       "\\cellcolor{",z$colcolor[1],"}",
+                       z$rgroup[rgroupcount],"}}",sep="")
+            #temp=paste("\\cellcolor{",z$colcolor[1],"}",temp,sep="")
+            if(z$cspan.rgroup<(ncount+addrow)) {
+                for(j in (z$cspan.rgroup):(ncount+addrow-1)) {
+                    if(z$colcolor[j+1]!="white")
+                        temp=paste(temp,"&\\cellcolor{",z$colcolor[j+1],"}",sep="")
+                    else {
+                        if(!is.null(isspanRow(z,i+1,j+1))){
+                            if(isspanRow(z,i+1,j+1)<=0) {
+                                #for(k in 1:nrow(z$spanRow)) {
+                                #    if(z$spanRow[k,1]!=j+1) next
+                                #    if(z$spanRow[k,2]>=i+1) next
+                                #    if(z$spanRow[k,3]==i+1) break
+                                #}
+                                temp=paste(temp,"&\\cellcolor{",z$cellcolor[i+1,j+1],"}",sep="")
+                            }
+                            else temp=paste(temp,"&",sep="")
+                        }
+                        else temp=paste(temp,"&",sep="")
+                    }
+                    if(!is.null(colCount)){
+                        if(j %in% colCount[-length(colCount)]) {
+                            if(vlines[j+2]==0){
+                                #if(z$colcolor[z$cspan.rgroup+j]!="white")
+                                #    temp=paste(temp,"&\\cellcolor{",z$colcolor[z$cspan.rgroup+j],"}",sep="")
+                                #else temp=paste(temp,"&",sep="")
+                                temp=paste(temp,"&",sep="")
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    cat(paste(temp,"\\\\ \n",sep=""))
+    if(printcline>0) cat(paste("\\cline{1-",printcline,"}\n",sep=""))
+    rgroupcount=rgroupcount+1
+}
 }
 
 
@@ -1043,42 +1339,3 @@ define_colors=function(mycolors) {
     }
 }
 
-#' Delete first components of align
-#'
-#' @param align A character for define the align of column in Latex format
-align2nd=function(align){
-    if(substr(align,1,1)=="|") {
-        result=substr(align,2,nchar(align))
-        result=align2nd(result)
-    } else result=substr(align,2,nchar(align))
-    result
-}
-
-#' Count the number of align
-#'
-#' @param align A character for define the align of column in Latex format
-alignCount=function(align){
-    result=unlist(strsplit(align,"|",fixed=TRUE))
-    temp=c()
-    for(i in 1:length(result)) temp=paste(temp,result[i],sep="")
-    nchar(temp)
-}
-
-
-#' Check the validity of align
-#'
-#' @param align A character for define the align of column in Latex format
-#' @param ncount An integer equals of ncol function
-#' @param addrow An integer
-alignCheck=function(align,ncount,addrow){
-    count=alignCount(align)
-    #cat("align=",align,"count=",count,"\n")
-    while(count != (ncount+addrow)){
-       if(count< (ncount+addrow)) align=paste(align,"c",sep="")
-       else if(count > (ncount+addrow)) align=align2nd(align)
-       count=alignCount(align)
-       #cat("align=",align,"count=",count,"\n")
-    }
-    result=align
-    result
-}

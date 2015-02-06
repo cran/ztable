@@ -1,3 +1,80 @@
+## ----,results='asis'-----------------------------------------------------
+require(ztable)
+options(ztable.type="html")
+z=ztable(head(iris))
+z
+
+## ----,results='asis'-----------------------------------------------------
+z=ztable(head(iris),align="cccccc")
+z
+
+## ----,results='asis'-----------------------------------------------------
+cgroup=c("Sepal","Petal","Species")
+n.cgroup=c(2,2,1)
+z=addcgroup(z,cgroup=cgroup,n.cgroup=n.cgroup)
+z
+
+## ----,results='asis'-----------------------------------------------------
+rgroup=c("OneToThree","Four","FiveToSix")
+n.rgroup=c(3,1,2)
+
+z=addrgroup(z,rgroup=rgroup,n.rgroup=n.rgroup,cspan.rgroup=1)
+z
+print(z,type="latex")
+
+## ----,results='asis'-----------------------------------------------------
+ncount=c(123,120,123,124)
+sub=paste("(N=",ncount,")",sep="")
+z=addSubColNames(z,c(sub,NA))
+z
+
+## ----,results='asis'-----------------------------------------------------
+z=spanRow(z,col=2,from=4,to=7,"orange")
+z=spanRow(z,col=3,from=5,to=7,"platinum")
+z=spanRow(z,col=4,from=6,to=7,"cyan")
+z=spanRow(z,col=5,from=5,to=7,"yellow")
+z=spanRow(z,col=6,from=3,to=5,"yellow")
+z
+
+z=spanCol(z,row=2,from=3,to=4,"yellow")
+z=spanCol(z,row=3,from=4,to=5,"lightblue")
+z
+
+## ----,results='asis'-----------------------------------------------------
+vlines(z,type="all")       # type=1 gets same result
+z=vlines(z,type="none")      # type=0 gets same result
+z
+z=vlines(z,add=c(1,2,5))
+z
+
+## ----,results='asis'-----------------------------------------------------
+t1=head(iris,10)[,c(1,3,5)]
+t2=tail(iris,10)[,c(1,3,5)]
+t=cbind(t1,t2)
+z=ztable(t,caption="Table 1. Top 10 and Last 10 Data from iris",align="ccccccc")
+z
+
+## ----,results='asis'-----------------------------------------------------
+cgroup=c("Top 10","Last 10")
+n.cgroup=c(3,3)
+z=addcgroup(z,cgroup=cgroup,n.cgroup=n.cgroup)
+z 
+rgroup=c("Top 1-3","Top 4-6"," Top 7-10")
+n.rgroup=c(3,3,4)
+z=addrgroup(z,rgroup=rgroup,n.rgroup=n.rgroup,cspan.rgroup=1)
+z
+z=addRowColor(z,c(5,10),"pink")
+z=addColColor(z,4,"amber")
+z=addCellColor(z,rows=c(5,10),cols=4,"orange")
+z
+z=spanCol(z,row=2,from=2,to=3,color="lightcyan")
+z=spanRow(z,col=7,from=7,to=8,color="cyan")
+z
+
+## ----,results='asis'-----------------------------------------------------
+vlines(z,type=0)  # No vertical lines
+vlines(z,type=1)  # Vertical lines for all column
+
 ## ----, eval=FALSE--------------------------------------------------------
 #  options(ztable.type="html")
 
@@ -85,13 +162,6 @@ ztable(out)
 ztable(head(mtcars,15),zebra=0,zebra.color=NULL) 
 
 ## ----,results='asis'-----------------------------------------------------
-z=ztable(head(mtcars[1:3]),tabular=TRUE,zebra.color="peach-orange")
-z1=ztable(head(iris[1:3]),tabular=TRUE,zebra=2)
-
-parallelTables(width=c(0.5,0.5),list(z,z1),type="html")
-parallelTables(width=c(0.5,0.5),list(z,"figures/ztable3.png"),type="html")
-
-## ----,results='asis'-----------------------------------------------------
 z1=ztable(head(iris),zebra=2)
 z1
 print(z1,zebra.type=2)
@@ -117,60 +187,45 @@ ztable(head(mtcars[,1:9]),zebra=0,zebra.type=0,zebra.color=1:9,zebra.colnames=TR
 
 ## ----,results='asis'-----------------------------------------------------
 mycolor=rep("white",6)
-for(i in 1:40){
+for(i in 1:149){
     mycolor=c(mycolor,"white",zcolors$name[((i-1)*5+1):((i-1)*5+5)])
 }
+mycolor=c(mycolor,"white",zcolors$name[c(746:749,1)])
 a=c(zcolors$name[1:5])
-for(i in 2:40){
+for(i in 2:149){
     a=rbind(a,zcolors$name[((i-1)*5+1):((i-1)*5+5)])
 }
+a=rbind(a,zcolors$name[c(746:749,1)])
 a=data.frame(a,stringsAsFactors=FALSE,row.names=NULL)
 ztable(a,zebra=0,zebra.type=0,zebra.color=mycolor,include.rownames=FALSE,
        include.colnames=FALSE,longtable=TRUE)
 
 ## ----,results='asis'-----------------------------------------------------
+z=ztable(head(mtcars[1:3]),tabular=TRUE,zebra.color="peach-orange")
+z1=ztable(head(iris[1:3]),tabular=TRUE,zebra=2)
+
+parallelTables(width=c(0.5,0.5),list(z,z1),type="html")
+parallelTables(width=c(0.5,0.5),list(z,"figures/ztable3.png"),type="html")
+
+## ----,results='asis'-----------------------------------------------------
+require(moonBook)
+res=mytable(Dx~.,data=acs)
 options(ztable.zebra=NULL)
-z=ztable(head(mtcars))
+z=ztable(res)
 z
-z=addRowColor(z,c(4,7),color="pink")
-z=addColColor(z,7,color="amber")
-z=addCellColor(z,cols=7,rows=c(4,7),color="orange")
-z
+vlines(z,type="all")
+
 
 ## ----,results='asis'-----------------------------------------------------
-rgroup=c("Group A","Group B")
-n.rgroup=c(4,2)
-z=addrgroup(z,rgroup=rgroup,n.rgroup=n.rgroup)
+res1=mytable(sex+DM~.,data=acs)
+z=ztable(res1)
 z
-z=addrgroup(z,rgroup=rgroup,n.rgroup=n.rgroup,cspan.rgroup=1)
-z=addColColor(z,7,color="amber")
-z
+vlines(z,type="all")
 
 ## ----,results='asis'-----------------------------------------------------
-z=ztable(head(mtcars),digits=0)
-z=addColColor(z,10,color="platinum")
-cgroup=c("Group A","Group B","Group C")
-n.cgroup=c(3,4,4)
-cgroupcolor=c("white","white","white","platinum")
-z=addcgroup(z,cgroup=cgroup,n.cgroup=n.cgroup,cgroupcolor=cgroupcolor)
-z
-
-## ----,results='asis'-----------------------------------------------------
-z=ztable(head(iris))
-cgroup=c("Total",NA,NA)
-cgroup1=c("Group","Species",NA)
-cgroup2=c("SEPAL","PETAL","Species")
-cgroup=rbind(cgroup,cgroup1,cgroup2)
-n.cgroup=matrix(c(5,NA,NA,4,1,NA,2,2,1),byrow=TRUE,nrow=3)
-z=addcgroup(z,cgroup=cgroup,n.cgroup=n.cgroup)
-z
-
-## ----,results='asis'-----------------------------------------------------
-cgroupcolor=matrix(c("white","white","white","white","white","platinum","white","white",
-                     "white","cyan","platinum","white"),byrow=TRUE,nrow=3)
-z=addcgroup(z,cgroup=cgroup,n.cgroup=n.cgroup,cgroupcolor=cgroupcolor)
-z=addrgroup(z,rgroup=c("1to4","5to6"),n.rgroup=c(4,2),cspan.rgroup=1)
-z=addColColor(z,3,"cyan")
-z=addColColor(z,5,"platinum")
+z=addRowColor(z,c(13,16),"platinum")
+z=addColColor(z,c(5,8),"pink")
+z=addCellColor(z,rows=16,cols=c(5,8),color="orange")
+z=addCellColor(z,rows=13,cols=5,color="orange")
 z
 
