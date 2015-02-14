@@ -59,8 +59,8 @@ cgroup=c("Top 10","Last 10")
 n.cgroup=c(3,3)
 z=addcgroup(z,cgroup=cgroup,n.cgroup=n.cgroup)
 z 
-rgroup=c("Top 1-3","Top 4-6"," Top 7-10")
-n.rgroup=c(3,3,4)
+rgroup=c("Top 1-3","Top 4-5",NA," Top 7-10")
+n.rgroup=c(3,2,1,4)
 z=addrgroup(z,rgroup=rgroup,n.rgroup=n.rgroup,cspan.rgroup=1)
 z
 z=addRowColor(z,c(5,10),"pink")
@@ -70,6 +70,7 @@ z
 z=spanCol(z,row=2,from=2,to=3,color="lightcyan")
 z=spanRow(z,col=7,from=7,to=8,color="cyan")
 z
+hlines(z,type=1)
 
 ## ----,results='asis'-----------------------------------------------------
 vlines(z,type=0)  # No vertical lines
@@ -105,13 +106,11 @@ ztable(fit)
 
 ## ----,results='asis'-----------------------------------------------------
 a=anova(fit)
-str(a)
 ztable(a)
 
 ## ----,results='asis'-----------------------------------------------------
 fit2 <- lm(mpg ~ cyl+wt, data=mtcars)
 b=anova(fit2,fit)
-str(b)
 ztable(b)
 ztable(b,show.heading=FALSE)
 
@@ -157,6 +156,28 @@ ztable(summary(pr1))
 colon$TS = Surv(time,status==1) 
 out=coxph(TS~rx+obstruct+adhere+differ+extent+surg+node4,data=colon)
 ztable(out)
+
+## ----,comment=NA---------------------------------------------------------
+require(graphics)
+
+DNase1 <- subset(DNase, Run == 1)
+
+## using a selfStart model
+fm1DNase1 <- nls(density ~ SSlogis(log(conc), Asym, xmid, scal),DNase1)
+summary(fm1DNase1)
+
+## ----,results='asis',message=FALSE---------------------------------------
+ztable(fm1DNase1)
+
+## ----,results='asis'-----------------------------------------------------
+require(MASS)
+set.seed(123)
+x <- rgamma(100, shape = 5, rate = 0.1)
+a=fitdistr(x, "gamma")
+ztable(a)
+x3 <- rweibull(100, shape = 4, scale = 100)
+b=fitdistr(x3, "weibull")
+ztable(b)
 
 ## ----,results='asis',message=FALSE---------------------------------------
 ztable(head(mtcars,15),zebra=0,zebra.color=NULL) 
