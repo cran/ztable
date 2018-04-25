@@ -4,6 +4,7 @@
 #'@param digits Numeric vector of length equal to one (in which case it will be
 #'       replicated as necessary) or to the number of columns of the resulting table
 #' @param ... arguments to be passed to \code{\link{ztable_sub}}
+#' @export
 #'@examples
 #'require(moonBook)
 #'res=mytable(sex~.,data=acs)
@@ -23,5 +24,6 @@ ztable.mytable=function(x,digits=NULL,...){
     z=addSubColNames(z,sub)
     z$include.rownames=FALSE
     z=vlines(z,type=0)
+    class(z)=c("ztable","ztable.mytable")
     z
 }

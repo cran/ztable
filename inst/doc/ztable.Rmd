@@ -16,7 +16,7 @@ vignette: >
 Package "ztable" make everything possible about table. Basically, An object of "ztable" made from a data.frame. The default output format of ztable is RStudio::viewer or web-browser format(type="viewer"). So if you want to use ztable in a "html" format, you should change the parameter ztable.type to "html". If you want to use ztable in latex format, you should change the parameter ztable.type to "latex". 
 
 ```{r,results='asis'}
-require(ztable)
+library(ztable)
 options(ztable.type="html")
 z=ztable(head(iris))
 z
@@ -26,6 +26,17 @@ You can change the position of data in each cell by adjusting the parameter "ali
 ```{r,results='asis'}
 z=ztable(head(iris),align="cccccc")
 z
+```
+
+You can change backgroud color with addRowColor() and font color with addFrontColor() function.
+
+```{r,results='asis'}
+require(magrittr)
+ztable(head(iris)) %>%
+    addRowColor(rows=1,color="#C90000") %>%
+    addFrontColor(rows=1,cols=1:6,color="white") %>%
+    print
+
 ```
 
 You can add column groups to ztable using addcgroup function. The n.cgroup means how much columns included in each row group. 
@@ -439,4 +450,33 @@ z=addCellColor(z,rows=13,cols=5,color="orange")
 z
 ```
 
+You can use pipe from package "magrittr"
 
+```{r,results='asis'}
+require(magrittr)
+
+res1=mytable(sex+DM~.,data=acs)
+z=ztable(res1)
+z %>%
+   addRowColor(c(13,16),"platinum") %>%
+   addColColor(c(5,8),"pink") %>%
+   addCellColor(rows=16,cols=c(5,8),color="orange") %>%
+   addCellColor(rows=13,cols=5,color="orange") %>%
+   print        
+```
+
+You can use addSigColor() function to colorized significant rows of ztable.mytable
+
+```{r,results='asis'}
+
+res1=mytable(sex~.,data=acs)
+res1 %>% ztable %>%
+   addSigColor %>%
+   print        
+res2<-mytable(sex+DM~.,data=acs)
+res2 %>% 
+    ztable %>%
+    addSigColor(sigp=0.01,sigcolor="platinum") %>%
+    print
+
+```

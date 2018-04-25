@@ -4,13 +4,15 @@
 
 <head>
 
-<meta charset="utf-8">
+<meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <meta name="author" content="Keon-Woong Moon" />
 
-<meta name="date" content="2015-02-14" />
+<meta name="date" content="2018-04-25" />
 
 <title>Package ztable</title>
 
@@ -18,32 +20,46 @@
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
+div.sourceCode { overflow-x: auto; }
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0; padding: 0; vertical-align: baseline; border: none; }
 table.sourceCode { width: 100%; line-height: 100%; }
 td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
 td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; }
-code > span.dt { color: #902000; }
-code > span.dv { color: #40a070; }
-code > span.bn { color: #40a070; }
-code > span.fl { color: #40a070; }
-code > span.ch { color: #4070a0; }
-code > span.st { color: #4070a0; }
-code > span.co { color: #60a0b0; font-style: italic; }
-code > span.ot { color: #007020; }
-code > span.al { color: #ff0000; font-weight: bold; }
-code > span.fu { color: #06287e; }
-code > span.er { color: #ff0000; font-weight: bold; }
-</style>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 </style>
 
 
-<link href="data:text/css,body%20%7B%0A%20%20background%2Dcolor%3A%20%23fff%3B%0A%20%20margin%3A%201em%20auto%3B%0A%20%20max%2Dwidth%3A%20700px%3B%0A%20%20overflow%3A%20visible%3B%0A%20%20padding%2Dleft%3A%202em%3B%0A%20%20padding%2Dright%3A%202em%3B%0A%20%20font%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0A%20%20font%2Dsize%3A%2014px%3B%0A%20%20line%2Dheight%3A%201%2E35%3B%0A%7D%0A%0A%23header%20%7B%0A%20%20text%2Dalign%3A%20center%3B%0A%7D%0A%0A%23TOC%20%7B%0A%20%20clear%3A%20both%3B%0A%20%20margin%3A%200%200%2010px%2010px%3B%0A%20%20padding%3A%204px%3B%0A%20%20width%3A%20400px%3B%0A%20%20border%3A%201px%20solid%20%23CCCCCC%3B%0A%20%20border%2Dradius%3A%205px%3B%0A%0A%20%20background%2Dcolor%3A%20%23f6f6f6%3B%0A%20%20font%2Dsize%3A%2013px%3B%0A%20%20line%2Dheight%3A%201%2E3%3B%0A%7D%0A%20%20%23TOC%20%2Etoctitle%20%7B%0A%20%20%20%20font%2Dweight%3A%20bold%3B%0A%20%20%20%20font%2Dsize%3A%2015px%3B%0A%20%20%20%20margin%2Dleft%3A%205px%3B%0A%20%20%7D%0A%0A%20%20%23TOC%20ul%20%7B%0A%20%20%20%20padding%2Dleft%3A%2040px%3B%0A%20%20%20%20margin%2Dleft%3A%20%2D1%2E5em%3B%0A%20%20%20%20margin%2Dtop%3A%205px%3B%0A%20%20%20%20margin%2Dbottom%3A%205px%3B%0A%20%20%7D%0A%20%20%23TOC%20ul%20ul%20%7B%0A%20%20%20%20margin%2Dleft%3A%20%2D2em%3B%0A%20%20%7D%0A%20%20%23TOC%20li%20%7B%0A%20%20%20%20line%2Dheight%3A%2016px%3B%0A%20%20%7D%0A%0Atable%20%7B%0A%20%20margin%3A%201em%20auto%3B%0A%20%20border%2Dwidth%3A%201px%3B%0A%20%20border%2Dcolor%3A%20%23DDDDDD%3B%0A%20%20border%2Dstyle%3A%20outset%3B%0A%20%20border%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0A%20%20border%2Dwidth%3A%202px%3B%0A%20%20padding%3A%205px%3B%0A%20%20border%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0A%20%20border%2Dwidth%3A%201px%3B%0A%20%20border%2Dstyle%3A%20inset%3B%0A%20%20line%2Dheight%3A%2018px%3B%0A%20%20padding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0A%20%20border%2Dleft%2Dstyle%3A%20none%3B%0A%20%20border%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0A%0Ap%20%7B%0A%20%20margin%3A%200%2E5em%200%3B%0A%7D%0A%0Ablockquote%20%7B%0A%20%20background%2Dcolor%3A%20%23f6f6f6%3B%0A%20%20padding%3A%200%2E25em%200%2E75em%3B%0A%7D%0A%0Ahr%20%7B%0A%20%20border%2Dstyle%3A%20solid%3B%0A%20%20border%3A%20none%3B%0A%20%20border%2Dtop%3A%201px%20solid%20%23777%3B%0A%20%20margin%3A%2028px%200%3B%0A%7D%0A%0Adl%20%7B%0A%20%20margin%2Dleft%3A%200%3B%0A%7D%0A%20%20dl%20dd%20%7B%0A%20%20%20%20margin%2Dbottom%3A%2013px%3B%0A%20%20%20%20margin%2Dleft%3A%2013px%3B%0A%20%20%7D%0A%20%20dl%20dt%20%7B%0A%20%20%20%20font%2Dweight%3A%20bold%3B%0A%20%20%7D%0A%0Aul%20%7B%0A%20%20margin%2Dtop%3A%200%3B%0A%7D%0A%20%20ul%20li%20%7B%0A%20%20%20%20list%2Dstyle%3A%20circle%20outside%3B%0A%20%20%7D%0A%20%20ul%20ul%20%7B%0A%20%20%20%20margin%2Dbottom%3A%200%3B%0A%20%20%7D%0A%0Apre%2C%20code%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20color%3A%20%23333%3B%0A%7D%0Apre%20%7B%0A%20%20white%2Dspace%3A%20pre%2Dwrap%3B%20%20%20%20%2F%2A%20Wrap%20long%20lines%20%2A%2F%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20margin%3A%205px%200px%2010px%200px%3B%0A%20%20padding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0A%0Acode%20%7B%0A%20%20font%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0A%20%20font%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0A%20%20padding%3A%202px%200px%3B%0A%7D%0A%0Adiv%2Efigure%20%7B%0A%20%20text%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0A%20%20background%2Dcolor%3A%20%23FFFFFF%3B%0A%20%20padding%3A%202px%3B%0A%20%20border%3A%201px%20solid%20%23DDDDDD%3B%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20border%3A%201px%20solid%20%23CCCCCC%3B%0A%20%20margin%3A%200%205px%3B%0A%7D%0A%0Ah1%20%7B%0A%20%20margin%2Dtop%3A%200%3B%0A%20%20font%2Dsize%3A%2035px%3B%0A%20%20line%2Dheight%3A%2040px%3B%0A%7D%0A%0Ah2%20%7B%0A%20%20border%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0A%20%20padding%2Dtop%3A%2010px%3B%0A%20%20padding%2Dbottom%3A%202px%3B%0A%20%20font%2Dsize%3A%20145%25%3B%0A%7D%0A%0Ah3%20%7B%0A%20%20border%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0A%20%20padding%2Dtop%3A%2010px%3B%0A%20%20font%2Dsize%3A%20120%25%3B%0A%7D%0A%0Ah4%20%7B%0A%20%20border%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0A%20%20margin%2Dleft%3A%208px%3B%0A%20%20font%2Dsize%3A%20105%25%3B%0A%7D%0A%0Ah5%2C%20h6%20%7B%0A%20%20border%2Dbottom%3A%201px%20solid%20%23ccc%3B%0A%20%20font%2Dsize%3A%20105%25%3B%0A%7D%0A%0Aa%20%7B%0A%20%20color%3A%20%230033dd%3B%0A%20%20text%2Ddecoration%3A%20none%3B%0A%7D%0A%20%20a%3Ahover%20%7B%0A%20%20%20%20color%3A%20%236666ff%3B%20%7D%0A%20%20a%3Avisited%20%7B%0A%20%20%20%20color%3A%20%23800080%3B%20%7D%0A%20%20a%3Avisited%3Ahover%20%7B%0A%20%20%20%20color%3A%20%23BB00BB%3B%20%7D%0A%20%20a%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0A%20%20%20%20text%2Ddecoration%3A%20underline%3B%20%7D%0A%20%20a%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0A%20%20%20%20text%2Ddecoration%3A%20underline%3B%20%7D%0A%0A%2F%2A%20Class%20described%20in%20https%3A%2F%2Fbenjeffrey%2Ecom%2Fposts%2Fpandoc%2Dsyntax%2Dhighlighting%2Dcss%0A%20%20%20Colours%20from%20https%3A%2F%2Fgist%2Egithub%2Ecom%2Frobsimmons%2F1172277%20%2A%2F%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20Keyword%20%2A%2F%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%2F%2A%20DataType%20%2A%2F%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%2F%2A%20DecVal%20%28decimal%20values%29%20%2A%2F%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20BaseN%20%2A%2F%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20Float%20%2A%2F%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20Char%20%2A%2F%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20String%20%2A%2F%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%2F%2A%20Comment%20%2A%2F%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%2F%2A%20OtherToken%20%2A%2F%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20AlertToken%20%2A%2F%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20Function%20calls%20%2A%2F%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%2F%2A%20ErrorTok%20%2A%2F%0A%0A" rel="stylesheet" type="text/css" />
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
 
 </head>
 
@@ -51,11 +67,11 @@ code > span.er { color: #ff0000; font-weight: bold; }
 
 
 
-<div id="header">
-<h1 class="title">Package ztable</h1>
+
+<h1 class="title toc-ignore">Package ztable</h1>
 <h4 class="author"><em>Keon-Woong Moon</em></h4>
-<h4 class="date"><em>2015-02-14</em></h4>
-</div>
+<h4 class="date"><em>2018-04-25</em></h4>
+
 
 
 <div id="introduction" class="section level1">
@@ -63,17 +79,17 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <div id="table-show" class="section level2">
 <h2>Table Show</h2>
 <p>Package “ztable” make everything possible about table. Basically, An object of “ztable” made from a data.frame. The default output format of ztable is RStudio::viewer or web-browser format(type=“viewer”). So if you want to use ztable in a “html” format, you should change the parameter ztable.type to “html”. If you want to use ztable in latex format, you should change the parameter ztable.type to “latex”.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(ztable)</code></pre>
-<pre><code>## Loading required package: ztable
-## Welcome to package ztable ver 0.1.5</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">options</span>(<span class="dt">ztable.type=</span><span class="st">&quot;html&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ztable)</code></pre></div>
+<pre><code>## Welcome to package ztable ver 0.1.8</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">options</span>(<span class="dt">ztable.type=</span><span class="st">&quot;html&quot;</span>)
 z=<span class="kw">ztable</span>(<span class="kw">head</span>(iris))
-z</code></pre>
+z</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -230,13 +246,14 @@ setosa
 </tr>
 </table>
 <p>You can change the position of data in each cell by adjusting the parameter “align”.</p>
-<pre class="sourceCode r"><code class="sourceCode r">z=<span class="kw">ztable</span>(<span class="kw">head</span>(iris),<span class="dt">align=</span><span class="st">&quot;cccccc&quot;</span>)
-z</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">z=<span class="kw">ztable</span>(<span class="kw">head</span>(iris),<span class="dt">align=</span><span class="st">&quot;cccccc&quot;</span>)
+z</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -392,16 +409,185 @@ setosa
 </td>
 </tr>
 </table>
-<p>You can add column groups to ztable using addcgroup function. The n.cgroup means how much columns included in each row group.</p>
-<pre class="sourceCode r"><code class="sourceCode r">cgroup=<span class="kw">c</span>(<span class="st">&quot;Sepal&quot;</span>,<span class="st">&quot;Petal&quot;</span>,<span class="st">&quot;Species&quot;</span>)
-n.cgroup=<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>)
-z=<span class="kw">addcgroup</span>(z,<span class="dt">cgroup=</span>cgroup,<span class="dt">n.cgroup=</span>n.cgroup)
-z</code></pre>
+<p>You can change backgroud color with addRowColor() and font color with addFrontColor() function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(magrittr)</code></pre></div>
+<pre><code>## Loading required package: magrittr</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ztable</span>(<span class="kw">head</span>(iris)) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">addRowColor</span>(<span class="dt">rows=</span><span class="dv">1</span>,<span class="dt">color=</span><span class="st">&quot;#C90000&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">addFrontColor</span>(<span class="dt">rows=</span><span class="dv">1</span>,<span class="dt">cols=</span><span class="dv">1</span><span class="op">:</span><span class="dv">6</span>,<span class="dt">color=</span><span class="st">&quot;white&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span>print</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
+        th {
+              padding: 1px 1px 5px 5px;
+            }
+        td {
+             padding: 1px 1px 5px 5px; }
+      </style>
+</head>
+<table align="center" style="border-collapse: collapse; caption-side:top; font-size:11pt;">
+<caption style="text-align:center;">
+</caption>
+<tr>
+<th style="border-left: 0px solid black;background-color: #C90000;border-top: 2px solid gray;border-bottom: 1px solid gray;">
+ 
+</th>
+<th <th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;background-color: #C90000;color: #FFFFFF;">
+Sepal.Length
+</th>
+<th <th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;background-color: #C90000;color: #FFFFFF;">
+Sepal.Width
+</th>
+<th <th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;background-color: #C90000;color: #FFFFFF;">
+Petal.Length
+</th>
+<th <th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;background-color: #C90000;color: #FFFFFF;">
+Petal.Width
+</th>
+<th <th align="center" style="font-weight: normal;border-left: 0px solid black;border-right:0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;background-color: #C90000;color: #FFFFFF;">
+Species
+</th>
+</tr>
+<tr>
+<td style="border-left: 0px solid black; ">
+1
+</td>
+<td align="right" style="border-left: 0px solid black;">
+5.10
+</td>
+<td align="right" style="border-left: 0px solid black;">
+3.50
+</td>
+<td align="right" style="border-left: 0px solid black;">
+1.40
+</td>
+<td align="right" style="border-left: 0px solid black;">
+0.20
+</td>
+<td align="left" style="border-left: 0px solid black;border-right:0px solid black;">
+setosa
+</td>
+</tr>
+<tr>
+<td style="border-left: 0px solid black; border-top: hidden;">
+2
+</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">
+4.90
+</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">
+3.00
+</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">
+1.40
+</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">
+0.20
+</td>
+<td align="left" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+setosa
+</td>
+</tr>
+<tr>
+<td style="border-left: 0px solid black; border-top: hidden;">
+3
+</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">
+4.70
+</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">
+3.20
+</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">
+1.30
+</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">
+0.20
+</td>
+<td align="left" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+setosa
+</td>
+</tr>
+<tr>
+<td style="border-left: 0px solid black; border-top: hidden;">
+4
+</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">
+4.60
+</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">
+3.10
+</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">
+1.50
+</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">
+0.20
+</td>
+<td align="left" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+setosa
+</td>
+</tr>
+<tr>
+<td style="border-left: 0px solid black; border-top: hidden;">
+5
+</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">
+5.00
+</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">
+3.60
+</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">
+1.40
+</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">
+0.20
+</td>
+<td align="left" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+setosa
+</td>
+</tr>
+<tr>
+<td style="border-left: 0px solid black; border-top: hidden;">
+6
+</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">
+5.40
+</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">
+3.90
+</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">
+1.70
+</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">
+0.40
+</td>
+<td align="left" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+setosa
+</td>
+</tr>
+<tr>
+<td colspan="6" align="left" style="font-size:9pt ;border-top: 1px solid black; border-bottom: hidden;">
+</td>
+</tr>
+</table>
+<p>You can add column groups to ztable using addcgroup function. The n.cgroup means how much columns included in each row group.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cgroup=<span class="kw">c</span>(<span class="st">&quot;Sepal&quot;</span>,<span class="st">&quot;Petal&quot;</span>,<span class="st">&quot;Species&quot;</span>)
+n.cgroup=<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>)
+z=<span class="kw">addcgroup</span>(z,<span class="dt">cgroup=</span>cgroup,<span class="dt">n.cgroup=</span>n.cgroup)
+z</code></pre></div>
+<head>
+<style>
+        table {
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -607,16 +793,17 @@ setosa
 </tr>
 </table>
 <p>You can add row groups to ztable using addrgroup function. The n.rgroup means how much rows included in each row group. The cspan.rgroup means how much columns occupied by row group name.</p>
-<pre class="sourceCode r"><code class="sourceCode r">rgroup=<span class="kw">c</span>(<span class="st">&quot;OneToThree&quot;</span>,<span class="st">&quot;Four&quot;</span>,<span class="st">&quot;FiveToSix&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rgroup=<span class="kw">c</span>(<span class="st">&quot;OneToThree&quot;</span>,<span class="st">&quot;Four&quot;</span>,<span class="st">&quot;FiveToSix&quot;</span>)
 n.rgroup=<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">2</span>)
 
 z=<span class="kw">addrgroup</span>(z,<span class="dt">rgroup=</span>rgroup,<span class="dt">n.rgroup=</span>n.rgroup,<span class="dt">cspan.rgroup=</span><span class="dv">1</span>)
-z</code></pre>
+z</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -878,19 +1065,21 @@ setosa
 </td>
 </tr>
 </table>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(z,<span class="dt">type=</span><span class="st">&quot;latex&quot;</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(z,<span class="dt">type=</span><span class="st">&quot;latex&quot;</span>)</code></pre></div>
+  
 
-<p></p>
+
 <p>You can add another colname(subcolname), the N count for example. The length of subcolnames should be same with column count of data.frame. You can use “NA” and the column name spans 2 rows.</p>
-<pre class="sourceCode r"><code class="sourceCode r">ncount=<span class="kw">c</span>(<span class="dv">123</span>,<span class="dv">120</span>,<span class="dv">123</span>,<span class="dv">124</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ncount=<span class="kw">c</span>(<span class="dv">123</span>,<span class="dv">120</span>,<span class="dv">123</span>,<span class="dv">124</span>)
 sub=<span class="kw">paste</span>(<span class="st">&quot;(N=&quot;</span>,ncount,<span class="st">&quot;)&quot;</span>,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)
 z=<span class="kw">addSubColNames</span>(z,<span class="kw">c</span>(sub,<span class="ot">NA</span>))
-z</code></pre>
+z</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -1176,17 +1365,18 @@ setosa
 </tr>
 </table>
 <p>You can merge cells by spanRow or spanCol function.</p>
-<pre class="sourceCode r"><code class="sourceCode r">z=<span class="kw">spanRow</span>(z,<span class="dt">col=</span><span class="dv">2</span>,<span class="dt">from=</span><span class="dv">4</span>,<span class="dt">to=</span><span class="dv">7</span>,<span class="st">&quot;orange&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">z=<span class="kw">spanRow</span>(z,<span class="dt">col=</span><span class="dv">2</span>,<span class="dt">from=</span><span class="dv">4</span>,<span class="dt">to=</span><span class="dv">7</span>,<span class="st">&quot;orange&quot;</span>)
 z=<span class="kw">spanRow</span>(z,<span class="dt">col=</span><span class="dv">3</span>,<span class="dt">from=</span><span class="dv">5</span>,<span class="dt">to=</span><span class="dv">7</span>,<span class="st">&quot;platinum&quot;</span>)
 z=<span class="kw">spanRow</span>(z,<span class="dt">col=</span><span class="dv">4</span>,<span class="dt">from=</span><span class="dv">6</span>,<span class="dt">to=</span><span class="dv">7</span>,<span class="st">&quot;cyan&quot;</span>)
 z=<span class="kw">spanRow</span>(z,<span class="dt">col=</span><span class="dv">5</span>,<span class="dt">from=</span><span class="dv">5</span>,<span class="dt">to=</span><span class="dv">7</span>,<span class="st">&quot;yellow&quot;</span>)
 z=<span class="kw">spanRow</span>(z,<span class="dt">col=</span><span class="dv">6</span>,<span class="dt">from=</span><span class="dv">3</span>,<span class="dt">to=</span><span class="dv">5</span>,<span class="st">&quot;yellow&quot;</span>)
-z</code></pre>
+z</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -1431,14 +1621,15 @@ setosa
 </td>
 </tr>
 </table>
-<pre class="sourceCode r"><code class="sourceCode r">z=<span class="kw">spanCol</span>(z,<span class="dt">row=</span><span class="dv">2</span>,<span class="dt">from=</span><span class="dv">3</span>,<span class="dt">to=</span><span class="dv">4</span>,<span class="st">&quot;yellow&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">z=<span class="kw">spanCol</span>(z,<span class="dt">row=</span><span class="dv">2</span>,<span class="dt">from=</span><span class="dv">3</span>,<span class="dt">to=</span><span class="dv">4</span>,<span class="st">&quot;yellow&quot;</span>)
 z=<span class="kw">spanCol</span>(z,<span class="dt">row=</span><span class="dv">3</span>,<span class="dt">from=</span><span class="dv">4</span>,<span class="dt">to=</span><span class="dv">5</span>,<span class="st">&quot;lightblue&quot;</span>)
-z</code></pre>
+z</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -1676,12 +1867,13 @@ setosa
 </tr>
 </table>
 <p>You can add or adjust vertical lines of table by vlines function</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">vlines</span>(z,<span class="dt">type=</span><span class="st">&quot;all&quot;</span>)       <span class="co"># type=1 gets same result</span></code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">vlines</span>(z,<span class="dt">type=</span><span class="st">&quot;all&quot;</span>)       <span class="co"># type=1 gets same result</span></code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -1866,13 +2058,14 @@ setosa
 </td>
 </tr>
 </table>
-<pre class="sourceCode r"><code class="sourceCode r">z=<span class="kw">vlines</span>(z,<span class="dt">type=</span><span class="st">&quot;none&quot;</span>)      <span class="co"># type=0 gets same result</span>
-z</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">z=<span class="kw">vlines</span>(z,<span class="dt">type=</span><span class="st">&quot;none&quot;</span>)      <span class="co"># type=0 gets same result</span>
+z</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -2109,13 +2302,14 @@ setosa
 </td>
 </tr>
 </table>
-<pre class="sourceCode r"><code class="sourceCode r">z=<span class="kw">vlines</span>(z,<span class="dt">add=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">5</span>))
-z</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">z=<span class="kw">vlines</span>(z,<span class="dt">add=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">5</span>))
+z</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -2357,16 +2551,17 @@ setosa
 <div id="merge-two-tables" class="section level2">
 <h2>Merge two tables</h2>
 <p>You can bind two or more data.frame by cbind function.</p>
-<pre class="sourceCode r"><code class="sourceCode r">t1=<span class="kw">head</span>(iris,<span class="dv">10</span>)[,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">5</span>)]
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">t1=<span class="kw">head</span>(iris,<span class="dv">10</span>)[,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">5</span>)]
 t2=<span class="kw">tail</span>(iris,<span class="dv">10</span>)[,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">5</span>)]
 t=<span class="kw">cbind</span>(t1,t2)
 z=<span class="kw">ztable</span>(t,<span class="dt">caption=</span><span class="st">&quot;Table 1. Top 10 and Last 10 Data from iris&quot;</span>,<span class="dt">align=</span><span class="st">&quot;ccccccc&quot;</span>)
-z</code></pre>
+z</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -2637,15 +2832,16 @@ virginica
 </tr>
 </table>
 <p>And then, you can add column groups, row groups, add row colors, add column colors, add cell colors, and merge cells</p>
-<pre class="sourceCode r"><code class="sourceCode r">cgroup=<span class="kw">c</span>(<span class="st">&quot;Top 10&quot;</span>,<span class="st">&quot;Last 10&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cgroup=<span class="kw">c</span>(<span class="st">&quot;Top 10&quot;</span>,<span class="st">&quot;Last 10&quot;</span>)
 n.cgroup=<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">3</span>)
 z=<span class="kw">addcgroup</span>(z,<span class="dt">cgroup=</span>cgroup,<span class="dt">n.cgroup=</span>n.cgroup)
-z </code></pre>
+z </code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -2951,15 +3147,16 @@ virginica
 </td>
 </tr>
 </table>
-<pre class="sourceCode r"><code class="sourceCode r">rgroup=<span class="kw">c</span>(<span class="st">&quot;Top 1-3&quot;</span>,<span class="st">&quot;Top 4-5&quot;</span>,<span class="ot">NA</span>,<span class="st">&quot; Top 7-10&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rgroup=<span class="kw">c</span>(<span class="st">&quot;Top 1-3&quot;</span>,<span class="st">&quot;Top 4-5&quot;</span>,<span class="ot">NA</span>,<span class="st">&quot; Top 7-10&quot;</span>)
 n.rgroup=<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">4</span>)
 z=<span class="kw">addrgroup</span>(z,<span class="dt">rgroup=</span>rgroup,<span class="dt">n.rgroup=</span>n.rgroup,<span class="dt">cspan.rgroup=</span><span class="dv">1</span>)
-z</code></pre>
+z</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -3340,15 +3537,16 @@ virginica
 </td>
 </tr>
 </table>
-<pre class="sourceCode r"><code class="sourceCode r">z=<span class="kw">addRowColor</span>(z,<span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">10</span>),<span class="st">&quot;pink&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">z=<span class="kw">addRowColor</span>(z,<span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">10</span>),<span class="st">&quot;pink&quot;</span>)
 z=<span class="kw">addColColor</span>(z,<span class="dv">4</span>,<span class="st">&quot;amber&quot;</span>)
 z=<span class="kw">addCellColor</span>(z,<span class="dt">rows=</span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">10</span>),<span class="dt">cols=</span><span class="dv">4</span>,<span class="st">&quot;orange&quot;</span>)
-z</code></pre>
+z</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -3729,14 +3927,15 @@ virginica
 </td>
 </tr>
 </table>
-<pre class="sourceCode r"><code class="sourceCode r">z=<span class="kw">spanCol</span>(z,<span class="dt">row=</span><span class="dv">2</span>,<span class="dt">from=</span><span class="dv">2</span>,<span class="dt">to=</span><span class="dv">3</span>,<span class="dt">color=</span><span class="st">&quot;lightcyan&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">z=<span class="kw">spanCol</span>(z,<span class="dt">row=</span><span class="dv">2</span>,<span class="dt">from=</span><span class="dv">2</span>,<span class="dt">to=</span><span class="dv">3</span>,<span class="dt">color=</span><span class="st">&quot;lightcyan&quot;</span>)
 z=<span class="kw">spanRow</span>(z,<span class="dt">col=</span><span class="dv">7</span>,<span class="dt">from=</span><span class="dv">7</span>,<span class="dt">to=</span><span class="dv">8</span>,<span class="dt">color=</span><span class="st">&quot;cyan&quot;</span>)
-z</code></pre>
+z</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -4109,12 +4308,13 @@ virginica
 </td>
 </tr>
 </table>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hlines</span>(z,<span class="dt">type=</span><span class="dv">1</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hlines</span>(z,<span class="dt">type=</span><span class="dv">1</span>)</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -4488,12 +4688,13 @@ virginica
 </tr>
 </table>
 <p>And you can adjust vertical lines, too.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">vlines</span>(z,<span class="dt">type=</span><span class="dv">0</span>)  <span class="co"># No vertical lines</span></code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">vlines</span>(z,<span class="dt">type=</span><span class="dv">0</span>)  <span class="co"># No vertical lines</span></code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -4866,12 +5067,13 @@ virginica
 </td>
 </tr>
 </table>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">vlines</span>(z,<span class="dt">type=</span><span class="dv">1</span>)  <span class="co"># Vertical lines for all column</span></code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">vlines</span>(z,<span class="dt">type=</span><span class="dv">1</span>)  <span class="co"># Vertical lines for all column</span></code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -5215,24 +5417,25 @@ virginica
 <div id="basic-use" class="section level1">
 <h1>Basic Use</h1>
 <p>Package “ztable” consist of one function: ztable. It’s main function is creating zebra zebra striping tables(tables with alternating row colors) in both Latex and html formats easily from mainly data.frame or an R object such as matrix, lm, aov, anova, glm and coxph objects. It is fully customizable and you can get similar tables in both latex and html format without changing source. The default output is Rstudio::viewer, but you can get html format by adding just one sentence.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">options</span>(<span class="dt">ztable.type=</span><span class="st">&quot;html&quot;</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">options</span>(<span class="dt">ztable.type=</span><span class="st">&quot;html&quot;</span>)</code></pre></div>
 <p>It’s usage is somewhat similar to xtable, but very simple.</p>
 <div id="data.frame" class="section level2">
 <h2>data.frame</h2>
 <div id="basic-use-1" class="section level3">
 <h3>Basic Use</h3>
 <p>It’s use is very simple. Just use ‘ztable()’ function. You can get the zebra stripig table by set the parameter zebra=1 (default value is NULL)</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(ztable)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(ztable)
 <span class="kw">options</span>(<span class="dt">ztable.type=</span><span class="st">&quot;html&quot;</span>)
 <span class="kw">options</span>(<span class="dt">ztable.zebra=</span><span class="dv">1</span>)
 <span class="kw">options</span>(<span class="dt">ztable.zebra.color=</span><span class="st">&quot;platinum&quot;</span>)
 <span class="kw">options</span>(<span class="dt">ztable.colnames.bold=</span><span class="ot">TRUE</span>)
-<span class="kw">ztable</span>(<span class="kw">head</span>(mtcars))</code></pre>
+<span class="kw">ztable</span>(<span class="kw">head</span>(mtcars))</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -5518,13 +5721,14 @@ Valiant
 <div id="tailoring-zebra-striping" class="section level3">
 <h3>Tailoring zebra striping</h3>
 <p>You can get non-zebra table by change parameter zebra=NULL or change zebra striping on even rows by zebra=2.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ztable</span>(<span class="kw">head</span>(mtcars),<span class="dt">zebra=</span><span class="ot">NULL</span>,<span class="dt">size=</span><span class="dv">3</span>,
-       <span class="dt">caption=</span><span class="st">&quot;Table 1. Non-zebra Table with small size&quot;</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ztable</span>(<span class="kw">head</span>(mtcars),<span class="dt">zebra=</span><span class="ot">NULL</span>,<span class="dt">size=</span><span class="dv">3</span>,
+       <span class="dt">caption=</span><span class="st">&quot;Table 1. Non-zebra Table with small size&quot;</span>)</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -5811,14 +6015,15 @@ Valiant
 <div id="customize-the-caption-and-the-font-size" class="section level3">
 <h3>Customize the caption and the font size</h3>
 <p>You can change the position of table by using parameter position. You can use “r” for right position, “l” for left position and “c” for center position(default). You can change the color of zebra striping by change the parameter zebra.color. You can also change the size of font from 1 to 10(default is 5). You can change the caption.placement(“top” or “bottom”) and caption.position(“c” for center / “r” for right/ “l” for left).</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ztable</span>(<span class="kw">head</span>(mtcars[<span class="kw">c</span>(<span class="dv">1</span>:<span class="dv">7</span>)]),<span class="dt">zebra=</span><span class="dv">2</span>,<span class="dt">zebra.color=</span><span class="st">&quot;lightcyan&quot;</span>,<span class="dt">size=</span><span class="dv">7</span>,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ztable</span>(<span class="kw">head</span>(mtcars[<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>)]),<span class="dt">zebra=</span><span class="dv">2</span>,<span class="dt">zebra.color=</span><span class="st">&quot;lightcyan&quot;</span>,<span class="dt">size=</span><span class="dv">7</span>,
        <span class="dt">caption=</span><span class="st">&quot;Table 2. Left-sided caption at botom with large font&quot;</span>,
-       <span class="dt">caption.placement=</span><span class="st">&quot;bottom&quot;</span>,<span class="dt">caption.position=</span><span class="st">&quot;l&quot;</span>) </code></pre>
+       <span class="dt">caption.placement=</span><span class="st">&quot;bottom&quot;</span>,<span class="dt">caption.position=</span><span class="st">&quot;l&quot;</span>) </code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -6022,13 +6227,14 @@ Valiant
 <div id="aov-object" class="section level2">
 <h2>aov object</h2>
 <p>‘ztable()’ can be used for ‘aov’ object. When used for ‘aov’ object, the function call is added as footer to the table. The parameter ‘show.footer’ can be used whether or not include footer in the table. Dafault value is TRUE.</p>
-<pre class="sourceCode r"><code class="sourceCode r">out &lt;-<span class="st"> </span><span class="kw">aov</span>(mpg ~<span class="st"> </span>., <span class="dt">data=</span>mtcars)
-<span class="kw">ztable</span>(out)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">out &lt;-<span class="st"> </span><span class="kw">aov</span>(mpg <span class="op">~</span><span class="st"> </span>., <span class="dt">data=</span>mtcars)
+<span class="kw">ztable</span>(out)</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -6287,13 +6493,14 @@ Call: aov(formula = mpg ~ ., data = mtcars)
 <div id="linear-model-lm-object" class="section level2">
 <h2>Linear model : ‘lm’ object</h2>
 <p>‘ztable()’ can be used for ‘lm’ object. When used for ‘lm’ object, the function call is added as footer to the table, too.</p>
-<pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span><span class="kw">lm</span>(mpg ~<span class="st"> </span>cyl +<span class="st"> </span>disp +<span class="st"> </span>wt +<span class="st"> </span>drat +<span class="st"> </span>am, <span class="dt">data=</span>mtcars)
-<span class="kw">ztable</span>(fit)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span><span class="kw">lm</span>(mpg <span class="op">~</span><span class="st"> </span>cyl <span class="op">+</span><span class="st"> </span>disp <span class="op">+</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>drat <span class="op">+</span><span class="st"> </span>am, <span class="dt">data=</span>mtcars)
+<span class="kw">ztable</span>(fit)</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -6433,13 +6640,14 @@ Call: lm(formula = mpg ~ cyl + disp + wt + drat + am, data = mtcars)
 <div id="analysis-of-variance-table-anova-object" class="section level2">
 <h2>Analysis of Variance Table : ‘anova’ object</h2>
 <p>‘ztable()’ can be used for ‘anova’ object to show the anova table. When used for ‘anova’ object, headings of anova are added as headings to the table. The parameter ‘show.footer’ can be used whether or not include footer in the table. Dafault value is TRUE.</p>
-<pre class="sourceCode r"><code class="sourceCode r">a=<span class="kw">anova</span>(fit)
-<span class="kw">ztable</span>(a)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">a=<span class="kw">anova</span>(fit)
+<span class="kw">ztable</span>(a)</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -6604,14 +6812,15 @@ Residuals
 </tr>
 </table>
 <p>This is examples of another ‘anova’ object. The models in this anova tables showed as table headings. You can decide whether or not include the headings in the tableby using parameter ‘show.heading’(default: TRUE).</p>
-<pre class="sourceCode r"><code class="sourceCode r">fit2 &lt;-<span class="st"> </span><span class="kw">lm</span>(mpg ~<span class="st"> </span>cyl+wt, <span class="dt">data=</span>mtcars)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit2 &lt;-<span class="st"> </span><span class="kw">lm</span>(mpg <span class="op">~</span><span class="st"> </span>cyl<span class="op">+</span>wt, <span class="dt">data=</span>mtcars)
 b=<span class="kw">anova</span>(fit2,fit)
-<span class="kw">ztable</span>(b)</code></pre>
+<span class="kw">ztable</span>(b)</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -6707,12 +6916,13 @@ Pr(&gt;F)
 </td>
 </tr>
 </table>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ztable</span>(b,<span class="dt">show.heading=</span><span class="ot">FALSE</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ztable</span>(b,<span class="dt">show.heading=</span><span class="ot">FALSE</span>)</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -6797,18 +7007,18 @@ Pr(&gt;F)
 <div id="generalized-linear-model-glm-object" class="section level2">
 <h2>Generalized linear model ; ‘glm’ object</h2>
 <p>‘ztable()’ can be used for ‘glm’(generalized linear model) object. In this time, ‘ztable()’ shows the <strong>odds ratio(OR) and 95% confidence interval</strong> as well as atandard R output.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(survival)</code></pre>
-<pre><code>## Loading required package: survival
-## Loading required package: splines</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(colon)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(survival)</code></pre></div>
+<pre><code>## Loading required package: survival</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(colon)
 <span class="kw">attach</span>(colon)
-out &lt;-<span class="st"> </span><span class="kw">glm</span>(status ~<span class="st"> </span>rx+obstruct+adhere+nodes+extent, <span class="dt">data=</span>colon, <span class="dt">family=</span>binomial)
-<span class="kw">ztable</span>(out)</code></pre>
+out &lt;-<span class="st"> </span><span class="kw">glm</span>(status <span class="op">~</span><span class="st"> </span>rx<span class="op">+</span>obstruct<span class="op">+</span>adhere<span class="op">+</span>nodes<span class="op">+</span>extent, <span class="dt">data=</span>colon, <span class="dt">family=</span>binomial)
+<span class="kw">ztable</span>(out)</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -6917,7 +7127,7 @@ rxLev+5FU
 0.54
 </td>
 <td align="right" style="border-left: 0px solid black;border-top: hidden;background-color: #E5E4E2;">
-0.42
+0.43
 </td>
 <td align="right" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #E5E4E2;">
 0.69
@@ -7021,10 +7231,10 @@ extent
 1.87
 </td>
 <td align="right" style="border-left: 0px solid black;border-top: hidden;background-color: #E5E4E2;">
-1.50
+1.49
 </td>
 <td align="right" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #E5E4E2;">
-2.34
+2.33
 </td>
 </tr>
 <tr>
@@ -7034,12 +7244,13 @@ Call: glm(formula = status ~ rx + obstruct + adhere + nodes + extent, family = b
 </tr>
 </table>
 <p>Again, ‘ztable()’ also shows the anova table of this model.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ztable</span>(<span class="kw">anova</span>(out))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ztable</span>(<span class="kw">anova</span>(out))</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -7195,14 +7406,15 @@ extent
 </div>
 <div id="more-aov-object" class="section level2">
 <h2>More ‘aov’ object</h2>
-<pre class="sourceCode r"><code class="sourceCode r">op &lt;-<span class="st"> </span><span class="kw">options</span>(<span class="dt">contrasts =</span> <span class="kw">c</span>(<span class="st">&quot;contr.helmert&quot;</span>, <span class="st">&quot;contr.poly&quot;</span>))
-npk.aov &lt;-<span class="st"> </span><span class="kw">aov</span>(yield ~<span class="st"> </span>block +<span class="st"> </span>N*P*K, npk) 
-<span class="kw">ztable</span>(npk.aov,<span class="dt">zebra=</span><span class="dv">1</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">op &lt;-<span class="st"> </span><span class="kw">options</span>(<span class="dt">contrasts =</span> <span class="kw">c</span>(<span class="st">&quot;contr.helmert&quot;</span>, <span class="st">&quot;contr.poly&quot;</span>))
+npk.aov &lt;-<span class="st"> </span><span class="kw">aov</span>(yield <span class="op">~</span><span class="st"> </span>block <span class="op">+</span><span class="st"> </span>N<span class="op">*</span>P<span class="op">*</span>K, npk) 
+<span class="kw">ztable</span>(npk.aov,<span class="dt">zebra=</span><span class="dv">1</span>)</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -7400,17 +7612,18 @@ Call: aov(formula = yield ~ block + N * P * K, data = npk)
 </div>
 <div id="more-lm-object" class="section level2">
 <h2>More ‘lm’ object</h2>
-<pre class="sourceCode r"><code class="sourceCode r">ctl &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">4.17</span>,<span class="fl">5.58</span>,<span class="fl">5.18</span>,<span class="fl">6.11</span>,<span class="fl">4.50</span>,<span class="fl">4.61</span>,<span class="fl">5.17</span>,<span class="fl">4.53</span>,<span class="fl">5.33</span>,<span class="fl">5.14</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ctl &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">4.17</span>,<span class="fl">5.58</span>,<span class="fl">5.18</span>,<span class="fl">6.11</span>,<span class="fl">4.50</span>,<span class="fl">4.61</span>,<span class="fl">5.17</span>,<span class="fl">4.53</span>,<span class="fl">5.33</span>,<span class="fl">5.14</span>)
 trt &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">4.81</span>,<span class="fl">4.17</span>,<span class="fl">4.41</span>,<span class="fl">3.59</span>,<span class="fl">5.87</span>,<span class="fl">3.83</span>,<span class="fl">6.03</span>,<span class="fl">4.89</span>,<span class="fl">4.32</span>,<span class="fl">4.69</span>)
 group &lt;-<span class="st"> </span><span class="kw">gl</span>(<span class="dv">2</span>, <span class="dv">10</span>, <span class="dv">20</span>, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Ctl&quot;</span>,<span class="st">&quot;Trt&quot;</span>))
 weight &lt;-<span class="st"> </span><span class="kw">c</span>(ctl, trt)
-lm.D9 &lt;-<span class="st"> </span><span class="kw">lm</span>(weight ~<span class="st"> </span>group)
-<span class="kw">ztable</span>(lm.D9)</code></pre>
+lm.D9 &lt;-<span class="st"> </span><span class="kw">lm</span>(weight <span class="op">~</span><span class="st"> </span>group)
+<span class="kw">ztable</span>(lm.D9)</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -7478,12 +7691,13 @@ Call: lm(formula = weight ~ group)
 </td>
 </tr>
 </table>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ztable</span>(<span class="kw">anova</span>(lm.D9),<span class="dt">align=</span><span class="st">&quot;|c|rrrr|r|&quot;</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ztable</span>(<span class="kw">anova</span>(lm.D9),<span class="dt">align=</span><span class="st">&quot;|c|rrrr|r|&quot;</span>)</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -7570,17 +7784,18 @@ Residuals
 </div>
 <div id="more-glm-object" class="section level2">
 <h2>More ‘glm’ object</h2>
-<pre class="sourceCode r"><code class="sourceCode r">counts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">18</span>,<span class="dv">17</span>,<span class="dv">15</span>,<span class="dv">20</span>,<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">25</span>,<span class="dv">13</span>,<span class="dv">12</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">counts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">18</span>,<span class="dv">17</span>,<span class="dv">15</span>,<span class="dv">20</span>,<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">25</span>,<span class="dv">13</span>,<span class="dv">12</span>)
 outcome &lt;-<span class="st"> </span><span class="kw">gl</span>(<span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">9</span>)
 treatment &lt;-<span class="st"> </span><span class="kw">gl</span>(<span class="dv">3</span>,<span class="dv">3</span>)
 d.AD &lt;-<span class="st"> </span><span class="kw">data.frame</span>(treatment, outcome, counts)
-glm.D93 &lt;-<span class="st"> </span><span class="kw">glm</span>(counts ~<span class="st"> </span>outcome +<span class="st"> </span>treatment, <span class="dt">family =</span> <span class="kw">poisson</span>())
-<span class="kw">ztable</span>(glm.D93)</code></pre>
+glm.D93 &lt;-<span class="st"> </span><span class="kw">glm</span>(counts <span class="op">~</span><span class="st"> </span>outcome <span class="op">+</span><span class="st"> </span>treatment, <span class="dt">family =</span> <span class="kw">poisson</span>())
+<span class="kw">ztable</span>(glm.D93)</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -7637,10 +7852,10 @@ ucl
 16.37
 </td>
 <td align="right" style="border-left: 0px solid black;background-color: #E5E4E2;">
-13.84
+13.91
 </td>
 <td align="right" style="border-left: 0px solid black;border-right:0px solid black;background-color: #E5E4E2;">
-19.18
+19.27
 </td>
 </tr>
 <tr>
@@ -7757,14 +7972,15 @@ Call: glm(formula = counts ~ outcome + treatment, family = poisson())
 <div id="principal-components-analysis-prcomp-object" class="section level2">
 <h2>Principal Components Analysis : ‘prcomp’ object</h2>
 <p>‘ztable()’ can be used in principal components analysis. Followings are examples of ztable() of ‘prcomp’ object.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(USArrests)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(USArrests)
 pr1 &lt;-<span class="st"> </span><span class="kw">prcomp</span>(USArrests) 
-<span class="kw">ztable</span>(pr1)</code></pre>
+<span class="kw">ztable</span>(pr1)</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -7870,12 +8086,13 @@ Rape
 </td>
 </tr>
 </table>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ztable</span>(<span class="kw">summary</span>(pr1))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ztable</span>(<span class="kw">summary</span>(pr1))</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -7968,14 +8185,15 @@ Cumulative Proportion
 <div id="survival-analysis-coxph-object" class="section level2">
 <h2>Survival Analysis : ‘coxph’ object</h2>
 <p>‘ztable()’ can be used in survival analysis. When used for Cox proportional hazard model, ‘ztable()’ showed the hazard ratio and 95% confidence interval ready for publication to medical journal.</p>
-<pre class="sourceCode r"><code class="sourceCode r">colon$TS =<span class="st"> </span><span class="kw">Surv</span>(time,status==<span class="dv">1</span>) 
-out=<span class="kw">coxph</span>(TS~rx+obstruct+adhere+differ+extent+surg+node4,<span class="dt">data=</span>colon)
-<span class="kw">ztable</span>(out)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">colon<span class="op">$</span>TS =<span class="st"> </span><span class="kw">Surv</span>(time,status<span class="op">==</span><span class="dv">1</span>) 
+out=<span class="kw">coxph</span>(TS<span class="op">~</span>rx<span class="op">+</span>obstruct<span class="op">+</span>adhere<span class="op">+</span>differ<span class="op">+</span>extent<span class="op">+</span>surg<span class="op">+</span>node4,<span class="dt">data=</span>colon)
+<span class="kw">ztable</span>(out)</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -8203,13 +8421,13 @@ Call: coxph(formula = TS ~ rx + obstruct + adhere + differ + extent + surg + nod
 <div id="nonlinear-least-squares-nls-obbject" class="section level2">
 <h2>Nonlinear Least Squares: ‘nls’ obbject</h2>
 <p>‘ztable()’ can be used to determine the nonlinear (weighted) least-squares estimates of the parameters of a nonlinear model. Followings are examples of ztable() of ‘nls’ object.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(graphics)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(graphics)
 
-DNase1 &lt;-<span class="st"> </span><span class="kw">subset</span>(DNase, Run ==<span class="st"> </span><span class="dv">1</span>)
+DNase1 &lt;-<span class="st"> </span><span class="kw">subset</span>(DNase, Run <span class="op">==</span><span class="st"> </span><span class="dv">1</span>)
 
 ## using a selfStart model
-fm1DNase1 &lt;-<span class="st"> </span><span class="kw">nls</span>(density ~<span class="st"> </span><span class="kw">SSlogis</span>(<span class="kw">log</span>(conc), Asym, xmid, scal),DNase1)
-<span class="kw">summary</span>(fm1DNase1)</code></pre>
+fm1DNase1 &lt;-<span class="st"> </span><span class="kw">nls</span>(density <span class="op">~</span><span class="st"> </span><span class="kw">SSlogis</span>(<span class="kw">log</span>(conc), Asym, xmid, scal),DNase1)
+<span class="kw">summary</span>(fm1DNase1)</code></pre></div>
 <pre><code>
 Formula: density ~ SSlogis(log(conc), Asym, xmid, scal)
 
@@ -8224,13 +8442,14 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 Residual standard error: 0.01919 on 13 degrees of freedom
 
 Number of iterations to convergence: 0 
-Achieved convergence tolerance: 3.281e-06</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ztable</span>(fm1DNase1)</code></pre>
+Achieved convergence tolerance: 8.283e-06</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ztable</span>(fm1DNase1)</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -8333,17 +8552,18 @@ scal
 <div id="maximum-likelihood-fitting-of-univariate-distributions" class="section level2">
 <h2>Maximum-likelihood Fitting of Univariate Distributions</h2>
 <p>‘ztable()’ can be used in maximum-likelihood fitting of univariate distributions. Followings are examples of ztable() of ‘fitdistr’ object.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(MASS)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(MASS)</code></pre></div>
 <pre><code>## Loading required package: MASS</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">123</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">123</span>)
 x &lt;-<span class="st"> </span><span class="kw">rgamma</span>(<span class="dv">100</span>, <span class="dt">shape =</span> <span class="dv">5</span>, <span class="dt">rate =</span> <span class="fl">0.1</span>)
 a=<span class="kw">fitdistr</span>(x, <span class="st">&quot;gamma&quot;</span>)
-<span class="kw">ztable</span>(a)</code></pre>
+<span class="kw">ztable</span>(a)</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -8393,14 +8613,15 @@ N=100, The log-likelihood=-429.18
 </td>
 </tr>
 </table>
-<pre class="sourceCode r"><code class="sourceCode r">x3 &lt;-<span class="st"> </span><span class="kw">rweibull</span>(<span class="dv">100</span>, <span class="dt">shape =</span> <span class="dv">4</span>, <span class="dt">scale =</span> <span class="dv">100</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x3 &lt;-<span class="st"> </span><span class="kw">rweibull</span>(<span class="dv">100</span>, <span class="dt">shape =</span> <span class="dv">4</span>, <span class="dt">scale =</span> <span class="dv">100</span>)
 b=<span class="kw">fitdistr</span>(x3, <span class="st">&quot;weibull&quot;</span>)
-<span class="kw">ztable</span>(b)</code></pre>
+<span class="kw">ztable</span>(b)</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -8454,12 +8675,13 @@ N=100, The log-likelihood=-471.68
 <div id="customize-the-zebra-striping-colors" class="section level2">
 <h2>Customize the zebra striping colors</h2>
 <p>If you wanted to use several colors for zebra striping, you can set the parameter ‘zebra’ to zero(e.g. zebra=0) and set the ‘zebra.color’ parameter with vector of your favorite colors. Your favorite colors are used to zebra striping. For your convienience, ten colors are predifned for this purpose. The predefined colors are: c(“peach”,“peach-orange”,“peachpuff”,“peach-yellow”,“pear”,“pearl”,“peridot”,“periwinkle”,“pastelred”, “pastelgray”).</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ztable</span>(<span class="kw">head</span>(mtcars,<span class="dv">15</span>),<span class="dt">zebra=</span><span class="dv">0</span>,<span class="dt">zebra.color=</span><span class="ot">NULL</span>) </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ztable</span>(<span class="kw">head</span>(mtcars,<span class="dv">15</span>),<span class="dt">zebra=</span><span class="dv">0</span>,<span class="dt">zebra.color=</span><span class="ot">NULL</span>) </code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -9088,13 +9310,14 @@ Cadillac Fleetwood
 <div id="vertical-striping" class="section level2">
 <h2>Vertical striping</h2>
 <p>If you wanted to vertical striping table, you can get it by set the parameter zebra.type 2. You can change the ztables parameters when printing.</p>
-<pre class="sourceCode r"><code class="sourceCode r">z1=<span class="kw">ztable</span>(<span class="kw">head</span>(iris),<span class="dt">zebra=</span><span class="dv">2</span>)
-z1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">z1=<span class="kw">ztable</span>(<span class="kw">head</span>(iris),<span class="dt">zebra=</span><span class="dv">2</span>)
+z1</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -9250,12 +9473,13 @@ setosa
 </td>
 </tr>
 </table>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(z1,<span class="dt">zebra.type=</span><span class="dv">2</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(z1,<span class="dt">zebra.type=</span><span class="dv">2</span>)</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -9411,12 +9635,13 @@ setosa
 </td>
 </tr>
 </table>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(z1,<span class="dt">zebra=</span><span class="dv">1</span>,<span class="dt">zebra.type=</span><span class="dv">2</span>,<span class="dt">zebra.colnames=</span><span class="ot">TRUE</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(z1,<span class="dt">zebra=</span><span class="dv">1</span>,<span class="dt">zebra.type=</span><span class="dv">2</span>,<span class="dt">zebra.colnames=</span><span class="ot">TRUE</span>)</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -9576,13 +9801,14 @@ setosa
 <div id="more-tailoring-zebra-striping" class="section level2">
 <h2>More tailoring zebra striping</h2>
 <p>You can update parameters of ztable with ‘update_ztable’ function.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">options</span>(<span class="dt">ztable.zebra.color=</span><span class="ot">NULL</span>)
-(<span class="dt">z1=</span><span class="kw">ztable</span>(<span class="kw">head</span>(iris),<span class="dt">zebra=</span><span class="dv">0</span>,<span class="dt">zebra.type=</span><span class="dv">2</span>))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">options</span>(<span class="dt">ztable.zebra.color=</span><span class="ot">NULL</span>)
+(<span class="dt">z1=</span><span class="kw">ztable</span>(<span class="kw">head</span>(iris),<span class="dt">zebra=</span><span class="dv">0</span>,<span class="dt">zebra.type=</span><span class="dv">2</span>))</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -9739,12 +9965,13 @@ setosa
 </tr>
 </table>
 <p>You can change the background color of colnames rows by setting zebra.colnames=TRUE.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">update_ztable</span>(z1,<span class="dt">colnames.bold=</span><span class="ot">TRUE</span>,<span class="dt">zebra.colnames=</span><span class="ot">TRUE</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">update_ztable</span>(z1,<span class="dt">colnames.bold=</span><span class="ot">TRUE</span>,<span class="dt">zebra.colnames=</span><span class="ot">TRUE</span>)</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -9901,12 +10128,13 @@ setosa
 </tr>
 </table>
 <p>You can customize the striping when printing.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(z1,<span class="dt">zebra.color=</span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;white&quot;</span>,<span class="dv">5</span>),<span class="st">&quot;peach&quot;</span>),<span class="dt">zebra.colnames=</span><span class="ot">TRUE</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(z1,<span class="dt">zebra.color=</span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;white&quot;</span>,<span class="dv">5</span>),<span class="st">&quot;peach&quot;</span>),<span class="dt">zebra.colnames=</span><span class="ot">TRUE</span>)</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -10066,12 +10294,13 @@ setosa
 <div id="change-the-background-color-of-all-cells" class="section level2">
 <h2>Change the background color of all cells</h2>
 <p>You can change the background color of all cells by setting the zebra.type=0.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ztable</span>(<span class="kw">head</span>(iris),<span class="dt">zebra=</span><span class="dv">0</span>,<span class="dt">zebra.type=</span><span class="dv">0</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ztable</span>(<span class="kw">head</span>(iris),<span class="dt">zebra=</span><span class="dv">0</span>,<span class="dt">zebra.type=</span><span class="dv">0</span>)</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -10227,12 +10456,13 @@ setosa
 </td>
 </tr>
 </table>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ztable</span>(<span class="kw">head</span>(iris),<span class="dt">zebra=</span><span class="dv">0</span>,<span class="dt">zebra.type=</span><span class="dv">0</span>,<span class="dt">zebra.color=</span>zcolors$name,<span class="dt">zebra.colnames=</span><span class="ot">TRUE</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ztable</span>(<span class="kw">head</span>(iris),<span class="dt">zebra=</span><span class="dv">0</span>,<span class="dt">zebra.type=</span><span class="dv">0</span>,<span class="dt">zebra.color=</span>zcolors<span class="op">$</span>name,<span class="dt">zebra.colnames=</span><span class="ot">TRUE</span>)</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -10392,12 +10622,13 @@ setosa
 <div id="diagonal-striping" class="section level2">
 <h2>Diagonal striping</h2>
 <p>You can make diagonal striping with use of zebra.color greater/lesser than column length by 1.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ztable</span>(<span class="kw">head</span>(iris),<span class="dt">zebra=</span><span class="dv">0</span>,<span class="dt">zebra.type=</span><span class="dv">0</span>,<span class="dt">zebra.color=</span><span class="dv">1</span>:<span class="dv">7</span>,<span class="dt">zebra.colnames=</span><span class="ot">TRUE</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ztable</span>(<span class="kw">head</span>(iris),<span class="dt">zebra=</span><span class="dv">0</span>,<span class="dt">zebra.type=</span><span class="dv">0</span>,<span class="dt">zebra.color=</span><span class="dv">1</span><span class="op">:</span><span class="dv">7</span>,<span class="dt">zebra.colnames=</span><span class="ot">TRUE</span>)</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -10553,12 +10784,13 @@ setosa
 </td>
 </tr>
 </table>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ztable</span>(<span class="kw">head</span>(mtcars[,<span class="dv">1</span>:<span class="dv">9</span>]),<span class="dt">zebra=</span><span class="dv">0</span>,<span class="dt">zebra.type=</span><span class="dv">0</span>,<span class="dt">zebra.color=</span><span class="dv">1</span>:<span class="dv">9</span>,<span class="dt">zebra.colnames=</span><span class="ot">TRUE</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ztable</span>(<span class="kw">head</span>(mtcars[,<span class="dv">1</span><span class="op">:</span><span class="dv">9</span>]),<span class="dt">zebra=</span><span class="dv">0</span>,<span class="dt">zebra.type=</span><span class="dv">0</span>,<span class="dt">zebra.color=</span><span class="dv">1</span><span class="op">:</span><span class="dv">9</span>,<span class="dt">zebra.colnames=</span><span class="ot">TRUE</span>)</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -10802,24 +11034,25 @@ Valiant
 <div id="all-background-colors" class="section level2">
 <h2>All background colors</h2>
 <p>This is demonstration of All background colors. All 749 colors are available in package ztable. Please type ?zcolors.</p>
-<pre class="sourceCode r"><code class="sourceCode r">mycolor=<span class="kw">rep</span>(<span class="st">&quot;white&quot;</span>,<span class="dv">6</span>)
-for(i in <span class="dv">1</span>:<span class="dv">149</span>){
-    mycolor=<span class="kw">c</span>(mycolor,<span class="st">&quot;white&quot;</span>,zcolors$name[((i<span class="dv">-1</span>)*<span class="dv">5+1</span>):((i<span class="dv">-1</span>)*<span class="dv">5+5</span>)])
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mycolor=<span class="kw">rep</span>(<span class="st">&quot;white&quot;</span>,<span class="dv">6</span>)
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">149</span>){
+    mycolor=<span class="kw">c</span>(mycolor,<span class="st">&quot;white&quot;</span>,zcolors<span class="op">$</span>name[((i<span class="op">-</span><span class="dv">1</span>)<span class="op">*</span><span class="dv">5</span><span class="op">+</span><span class="dv">1</span>)<span class="op">:</span>((i<span class="op">-</span><span class="dv">1</span>)<span class="op">*</span><span class="dv">5</span><span class="op">+</span><span class="dv">5</span>)])
 }
-mycolor=<span class="kw">c</span>(mycolor,<span class="st">&quot;white&quot;</span>,zcolors$name[<span class="kw">c</span>(<span class="dv">746</span>:<span class="dv">749</span>,<span class="dv">1</span>)])
-a=<span class="kw">c</span>(zcolors$name[<span class="dv">1</span>:<span class="dv">5</span>])
-for(i in <span class="dv">2</span>:<span class="dv">149</span>){
-    a=<span class="kw">rbind</span>(a,zcolors$name[((i<span class="dv">-1</span>)*<span class="dv">5+1</span>):((i<span class="dv">-1</span>)*<span class="dv">5+5</span>)])
+mycolor=<span class="kw">c</span>(mycolor,<span class="st">&quot;white&quot;</span>,zcolors<span class="op">$</span>name[<span class="kw">c</span>(<span class="dv">746</span><span class="op">:</span><span class="dv">749</span>,<span class="dv">1</span>)])
+a=<span class="kw">c</span>(zcolors<span class="op">$</span>name[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>])
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span><span class="dv">149</span>){
+    a=<span class="kw">rbind</span>(a,zcolors<span class="op">$</span>name[((i<span class="op">-</span><span class="dv">1</span>)<span class="op">*</span><span class="dv">5</span><span class="op">+</span><span class="dv">1</span>)<span class="op">:</span>((i<span class="op">-</span><span class="dv">1</span>)<span class="op">*</span><span class="dv">5</span><span class="op">+</span><span class="dv">5</span>)])
 }
-a=<span class="kw">rbind</span>(a,zcolors$name[<span class="kw">c</span>(<span class="dv">746</span>:<span class="dv">749</span>,<span class="dv">1</span>)])
+a=<span class="kw">rbind</span>(a,zcolors<span class="op">$</span>name[<span class="kw">c</span>(<span class="dv">746</span><span class="op">:</span><span class="dv">749</span>,<span class="dv">1</span>)])
 a=<span class="kw">data.frame</span>(a,<span class="dt">stringsAsFactors=</span><span class="ot">FALSE</span>,<span class="dt">row.names=</span><span class="ot">NULL</span>)
 <span class="kw">ztable</span>(a,<span class="dt">zebra=</span><span class="dv">0</span>,<span class="dt">zebra.type=</span><span class="dv">0</span>,<span class="dt">zebra.color=</span>mycolor,<span class="dt">include.rownames=</span><span class="ot">FALSE</span>,
-       <span class="dt">include.colnames=</span><span class="ot">FALSE</span>,<span class="dt">longtable=</span><span class="ot">TRUE</span>)</code></pre>
+       <span class="dt">include.colnames=</span><span class="ot">FALSE</span>,<span class="dt">longtable=</span><span class="ot">TRUE</span>)</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -13389,10 +13622,10 @@ airforceblue
 <div id="place-two-or-more-ztables-or-figures-side-by-side" class="section level2">
 <h2>Place two or more ztables or figures side by side</h2>
 <p>If you wanted to place two or more ztables or figures side by side, you can use function <strong>parallelTables()</strong>. Function <strong>parallelTables()</strong> takes three parameters. The first parameter width is a numeric vector specifies the width to which the tables or figures should be scaled. The second parameter is a list of ztable or names of valid figure. The 3rd parameter ‘type’ is the type of table to produce. Possible values for type are “latex” or “html”. Default value is “latex”. See the examples.</p>
-<pre class="sourceCode r"><code class="sourceCode r">z=<span class="kw">ztable</span>(<span class="kw">head</span>(mtcars[<span class="dv">1</span>:<span class="dv">3</span>]),<span class="dt">tabular=</span><span class="ot">TRUE</span>,<span class="dt">zebra.color=</span><span class="st">&quot;peach-orange&quot;</span>)
-z1=<span class="kw">ztable</span>(<span class="kw">head</span>(iris[<span class="dv">1</span>:<span class="dv">3</span>]),<span class="dt">tabular=</span><span class="ot">TRUE</span>,<span class="dt">zebra=</span><span class="dv">2</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">z=<span class="kw">ztable</span>(<span class="kw">head</span>(mtcars[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>]),<span class="dt">tabular=</span><span class="ot">TRUE</span>,<span class="dt">zebra.color=</span><span class="st">&quot;peach-orange&quot;</span>)
+z1=<span class="kw">ztable</span>(<span class="kw">head</span>(iris[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>]),<span class="dt">tabular=</span><span class="ot">TRUE</span>,<span class="dt">zebra=</span><span class="dv">2</span>)
 
-<span class="kw">parallelTables</span>(<span class="dt">width=</span><span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>),<span class="kw">list</span>(z,z1),<span class="dt">type=</span><span class="st">&quot;html&quot;</span>)</code></pre>
+<span class="kw">parallelTables</span>(<span class="dt">width=</span><span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>),<span class="kw">list</span>(z,z1),<span class="dt">type=</span><span class="st">&quot;html&quot;</span>)</code></pre></div>
 <table width="100%" cellspacing="5px" cellpadding="5px" border="0">
 <colgroup>
 <col width="50%">
@@ -13403,8 +13636,9 @@ z1=<span class="kw">ztable</span>(<span class="kw">head</span>(iris[<span class=
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -13523,8 +13757,9 @@ Valiant
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -13641,7 +13876,7 @@ Petal.Length
 </td>
 </tr>
 </table>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">parallelTables</span>(<span class="dt">width=</span><span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>),<span class="kw">list</span>(z,<span class="st">&quot;figures/ztable3.png&quot;</span>),<span class="dt">type=</span><span class="st">&quot;html&quot;</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">parallelTables</span>(<span class="dt">width=</span><span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>),<span class="kw">list</span>(z,<span class="st">&quot;figures/ztable3.png&quot;</span>),<span class="dt">type=</span><span class="st">&quot;html&quot;</span>)</code></pre></div>
 <table width="100%" cellspacing="5px" cellpadding="5px" border="0">
 <colgroup>
 <col width="50%">
@@ -13652,8 +13887,9 @@ Petal.Length
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -13777,17 +14013,18 @@ Valiant
 <div id="mytable-object-from-moonbook-package" class="section level2">
 <h2>mytable object from “moonBook” package</h2>
 <p>‘ztable()’ can be used for ‘mytable’ object made by “mytable” function from “moonBook” package.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(moonBook)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(moonBook)</code></pre></div>
 <pre><code>## Loading required package: moonBook</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r">res=<span class="kw">mytable</span>(Dx~.,<span class="dt">data=</span>acs)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res=<span class="kw">mytable</span>(Dx<span class="op">~</span>.,<span class="dt">data=</span>acs)
 <span class="kw">options</span>(<span class="dt">ztable.zebra=</span><span class="ot">NULL</span>)
 z=<span class="kw">ztable</span>(res)
-z</code></pre>
+z</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -14323,12 +14560,13 @@ smoking
 </td>
 </tr>
 </table>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">vlines</span>(z,<span class="dt">type=</span><span class="st">&quot;all&quot;</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">vlines</span>(z,<span class="dt">type=</span><span class="st">&quot;all&quot;</span>)</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -14868,14 +15106,15 @@ smoking
 <div id="cbind.mytable-object" class="section level2">
 <h2>cbind.mytable object</h2>
 <p>‘ztable()’ can be used for ‘cbind.mytable’ object made by “mytable” function from “moonBook” package.</p>
-<pre class="sourceCode r"><code class="sourceCode r">res1=<span class="kw">mytable</span>(sex+DM~.,<span class="dt">data=</span>acs)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res1=<span class="kw">mytable</span>(sex<span class="op">+</span>DM<span class="op">~</span>.,<span class="dt">data=</span>acs)
 z=<span class="kw">ztable</span>(res1)
-z</code></pre>
+z</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -15687,12 +15926,13 @@ smoking
 </td>
 </tr>
 </table>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">vlines</span>(z,<span class="dt">type=</span><span class="st">&quot;all&quot;</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">vlines</span>(z,<span class="dt">type=</span><span class="st">&quot;all&quot;</span>)</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -16371,16 +16611,17 @@ smoking
 </tr>
 </table>
 <p>You can use all ztable related function in this table.</p>
-<pre class="sourceCode r"><code class="sourceCode r">z=<span class="kw">addRowColor</span>(z,<span class="kw">c</span>(<span class="dv">13</span>,<span class="dv">16</span>),<span class="st">&quot;platinum&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">z=<span class="kw">addRowColor</span>(z,<span class="kw">c</span>(<span class="dv">13</span>,<span class="dv">16</span>),<span class="st">&quot;platinum&quot;</span>)
 z=<span class="kw">addColColor</span>(z,<span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">8</span>),<span class="st">&quot;pink&quot;</span>)
 z=<span class="kw">addCellColor</span>(z,<span class="dt">rows=</span><span class="dv">16</span>,<span class="dt">cols=</span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">8</span>),<span class="dt">color=</span><span class="st">&quot;orange&quot;</span>)
 z=<span class="kw">addCellColor</span>(z,<span class="dt">rows=</span><span class="dv">13</span>,<span class="dt">cols=</span><span class="dv">5</span>,<span class="dt">color=</span><span class="st">&quot;orange&quot;</span>)
-z</code></pre>
+z</code></pre></div>
 <head>
 <style>
         table {
-              font-family: serif;
-              text-align: right;}
+              font-family: times ;
+color:  black ;
+text-align: right;}
         th {
               padding: 1px 1px 5px 5px;
             }
@@ -17192,6 +17433,2123 @@ smoking
 </td>
 </tr>
 </table>
+<p>You can use pipe from package “magrittr”</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(magrittr)
+
+res1=<span class="kw">mytable</span>(sex<span class="op">+</span>DM<span class="op">~</span>.,<span class="dt">data=</span>acs)
+z=<span class="kw">ztable</span>(res1)
+z <span class="op">%&gt;%</span>
+<span class="st">   </span><span class="kw">addRowColor</span>(<span class="kw">c</span>(<span class="dv">13</span>,<span class="dv">16</span>),<span class="st">&quot;platinum&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">   </span><span class="kw">addColColor</span>(<span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">8</span>),<span class="st">&quot;pink&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">   </span><span class="kw">addCellColor</span>(<span class="dt">rows=</span><span class="dv">16</span>,<span class="dt">cols=</span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">8</span>),<span class="dt">color=</span><span class="st">&quot;orange&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">   </span><span class="kw">addCellColor</span>(<span class="dt">rows=</span><span class="dv">13</span>,<span class="dt">cols=</span><span class="dv">5</span>,<span class="dt">color=</span><span class="st">&quot;orange&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">   </span>print        </code></pre></div>
+<head>
+<style>
+        table {
+              font-family: times ;
+color:  black ;
+text-align: right;}
+        th {
+              padding: 1px 1px 5px 5px;
+            }
+        td {
+             padding: 1px 1px 5px 5px; }
+      </style>
+</head>
+<table align="center" style="border-collapse: collapse; caption-side:top; font-size:11pt;">
+<caption style="text-align:center;">
+Descriptive Statistics Stratified by ‘SEX’ and ‘DM’
+</caption>
+<tr>
+<td colspan=" 1 " align="center" style="font-weight: bold;border-top: 2px solid gray; border-bottom: hidden; border-left: 0px solid black;">
+</td>
+<td style="border-top: 2px solid gray;border-bottom: hidden">
+ 
+</td>
+<td colspan=" 3 " align="center" style="font-weight: bold;border-top: 2px solid gray; border-bottom: 1px solid gray; border-left: 0px solid black;">
+Male
+</td>
+<td style="border-top: 2px solid gray;border-bottom: hidden">
+ 
+</td>
+<td colspan=" 3 " align="center" style="font-weight: bold;border-top: 2px solid gray; border-bottom: 1px solid gray; border-left: 0px solid black;border-right:0px solid black;">
+Female
+</td>
+</tr>
+<tr>
+<th <th rowspan="2" align="center" style="font-weight: bold;border-left: 0px solid black;border-bottom: 1px solid gray;">
+</th>
+<th style="border-bottom: hidden;">
+ 
+</th>
+<th <th align="center" style="font-weight: bold;border-left: 0px solid black;border-bottom: hidden;">
+No
+</th>
+<th <th align="center" style="font-weight: bold;border-left: 0px solid black;border-bottom: hidden;">
+Yes
+</th>
+<th <th rowspan="2" align="center" style="font-weight: bold;border-left: 0px solid black;border-bottom: 1px solid gray;background-color: #FFC0CB;">
+p
+</th>
+<th style="border-bottom: hidden;">
+ 
+</th>
+<th <th align="center" style="font-weight: bold;border-left: 0px solid black;border-bottom: hidden;">
+No
+</th>
+<th <th align="center" style="font-weight: bold;border-left: 0px solid black;border-bottom: hidden;">
+Yes
+</th>
+<th <th rowspan="2" align="center" style="font-weight: bold;border-left: 0px solid black;border-right:0px solid black;border-bottom: 1px solid gray;background-color: #FFC0CB;">
+p
+</th>
+</tr>
+<tr>
+<th style="border-bottom: 1px solid gray;">
+ 
+</th>
+<th align="center" style="font-weight: bold;border-left: 0px solid black;border-bottom: 1px solid gray;">
+(N=380)
+</th>
+<th align="center" style="font-weight: bold;border-left: 0px solid black;border-bottom: 1px solid gray;">
+(N=190)
+</th>
+<th style="border-bottom: 1px solid gray;">
+ 
+</th>
+<th align="center" style="font-weight: bold;border-left: 0px solid black;border-bottom: 1px solid gray;">
+(N=173)
+</th>
+<th align="center" style="font-weight: bold;border-left: 0px solid black;border-bottom: 1px solid gray;">
+(N=114)
+</th>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;">
+age
+</td>
+<td style>
+</td>
+<td align="center" style="border-left: 0px solid black;">
+60.9 ± 11.5
+</td>
+<td align="center" style="border-left: 0px solid black;">
+60.1 ± 10.6
+</td>
+<td align="center" style="border-left: 0px solid black;background-color: #FFC0CB;">
+0.472
+</td>
+<td style>
+</td>
+<td align="center" style="border-left: 0px solid black;">
+69.3 ± 11.4
+</td>
+<td align="center" style="border-left: 0px solid black;">
+67.8 ± 9.7
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;background-color: #FFC0CB;">
+0.257
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+cardiogenicShock
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #FFC0CB;">
+0.685
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #FFC0CB;">
+0.296
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    No
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+355 (93.4%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+175 (92.1%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #FFC0CB;">
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+168 (97.1%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+107 (93.9%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #FFC0CB;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    Yes
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+25 ( 6.6%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+15 ( 7.9%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #FFC0CB;">
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+5 ( 2.9%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+7 ( 6.1%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #FFC0CB;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+entry
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #FFC0CB;">
+0.552
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #FFC0CB;">
+0.665
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    Femoral
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+125 (32.9%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+68 (35.8%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #FFC0CB;">
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+74 (42.8%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+45 (39.5%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #FFC0CB;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    Radial
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+255 (67.1%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+122 (64.2%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #FFC0CB;">
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+99 (57.2%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+69 (60.5%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #FFC0CB;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+Dx
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #FFC0CB;">
+0.219
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #FFC0CB;">
+0.240
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    NSTEMI
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+71 (18.7%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+32 (16.8%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #FFC0CB;">
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+25 (14.5%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+25 (21.9%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #FFC0CB;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    STEMI
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+154 (40.5%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+66 (34.7%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #FFC0CB;">
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+54 (31.2%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+30 (26.3%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #FFC0CB;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    Unstable Angina
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+155 (40.8%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+92 (48.4%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #FFC0CB;">
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+94 (54.3%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+59 (51.8%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #FFC0CB;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;background-color: #E5E4E2;">
+EF
+</td>
+<td style="border-top: hidden; background-color:  #E5E4E2 ;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E5E4E2;">
+56.5 ± 8.3
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E5E4E2;">
+53.9 ± 11.0
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #FF7F00;">
+0.007
+</td>
+<td style="border-top: hidden; background-color:  #E5E4E2 ;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E5E4E2;">
+56.0 ± 10.1
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E5E4E2;">
+56.6 ± 10.0
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #FFC0CB;">
+0.655
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+height
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+168.1 ± 5.8
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+167.5 ± 6.7
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #FFC0CB;">
+0.386
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+153.9 ± 6.5
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+153.6 ± 5.8
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #FFC0CB;">
+0.707
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+weight
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+68.1 ± 10.4
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+69.8 ± 10.2
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #FFC0CB;">
+0.070
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+56.5 ± 8.7
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+58.4 ± 10.0
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #FFC0CB;">
+0.106
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;background-color: #E5E4E2;">
+BMI
+</td>
+<td style="border-top: hidden; background-color:  #E5E4E2 ;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E5E4E2;">
+24.0 ± 3.1
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E5E4E2;">
+24.9 ± 3.5
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #FF7F00;">
+0.005
+</td>
+<td style="border-top: hidden; background-color:  #E5E4E2 ;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E5E4E2;">
+23.8 ± 3.2
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E5E4E2;">
+24.8 ± 4.0
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #FF7F00;">
+0.046
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+obesity
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #FFC0CB;">
+0.027
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #FFC0CB;">
+0.359
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    No
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+261 (68.7%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+112 (58.9%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #FFC0CB;">
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+121 (69.9%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+73 (64.0%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #FFC0CB;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    Yes
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+119 (31.3%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+78 (41.1%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #FFC0CB;">
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+52 (30.1%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+41 (36.0%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #FFC0CB;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+TC
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+184.1 ± 46.7
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+181.8 ± 44.5
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #FFC0CB;">
+0.572
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+186.0 ± 43.1
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+193.3 ± 60.8
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #FFC0CB;">
+0.274
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+LDLC
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+117.9 ± 41.8
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+112.1 ± 39.4
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #FFC0CB;">
+0.115
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+116.3 ± 35.2
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+119.8 ± 48.6
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #FFC0CB;">
+0.519
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+HDLC
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+38.4 ± 11.4
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+36.8 ± 9.6
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #FFC0CB;">
+0.083
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+39.2 ± 10.9
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+38.8 ± 12.2
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #FFC0CB;">
+0.821
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+TG
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+115.2 ± 72.2
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+153.4 ± 130.7
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #FFC0CB;">
+0.000
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+114.2 ± 82.4
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+128.4 ± 65.5
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #FFC0CB;">
+0.112
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+HBP
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #FFC0CB;">
+0.000
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #FFC0CB;">
+0.356
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    No
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+205 (53.9%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+68 (35.8%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #FFC0CB;">
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+54 (31.2%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+29 (25.4%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #FFC0CB;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    Yes
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+175 (46.1%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+122 (64.2%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #FFC0CB;">
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+119 (68.8%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+85 (74.6%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #FFC0CB;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+smoking
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #FFC0CB;">
+0.386
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #FFC0CB;">
+0.093
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    Ex-smoker
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+101 (26.6%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+54 (28.4%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #FFC0CB;">
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+34 (19.7%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+15 (13.2%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #FFC0CB;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    Never
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+77 (20.3%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+46 (24.2%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #FFC0CB;">
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+118 (68.2%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+91 (79.8%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #FFC0CB;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    Smoker
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+202 (53.2%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+90 (47.4%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #FFC0CB;">
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+21 (12.1%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+8 ( 7.0%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #FFC0CB;">
+</td>
+</tr>
+<tr>
+<td colspan="9" align="left" style="font-size:9pt ;border-top: 1px solid black; border-bottom: hidden;">
+</td>
+</tr>
+</table>
+<p>You can use addSigColor() function to colorized significant rows of ztable.mytable</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res1=<span class="kw">mytable</span>(sex<span class="op">~</span>.,<span class="dt">data=</span>acs)
+res1 <span class="op">%&gt;%</span><span class="st"> </span>ztable <span class="op">%&gt;%</span>
+<span class="st">   </span>addSigColor <span class="op">%&gt;%</span>
+<span class="st">   </span>print        </code></pre></div>
+<head>
+<style>
+        table {
+              font-family: times ;
+color:  black ;
+text-align: right;}
+        th {
+              padding: 1px 1px 5px 5px;
+            }
+        td {
+             padding: 1px 1px 5px 5px; }
+      </style>
+</head>
+<table align="center" style="border-collapse: collapse; caption-side:top; font-size:11pt;">
+<caption style="text-align:center;">
+</caption>
+<tr>
+<th <th align="center" style="font-weight: bold;border-left: 0px solid black;border-bottom: hidden;border-top: 2px solid gray;">
+</th>
+<th <th align="center" style="font-weight: bold;border-left: 0px solid black;border-bottom: hidden;border-top: 2px solid gray;">
+Female
+</th>
+<th <th align="center" style="font-weight: bold;border-left: 0px solid black;border-bottom: hidden;border-top: 2px solid gray;">
+Male
+</th>
+<th <th rowspan="2" align="center" style="font-weight: bold;border-left: 0px solid black;border-right:0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;">
+p
+</th>
+</tr>
+<tr>
+<th align="center" style="font-weight: bold;border-left: 0px solid black;border-bottom: 1px solid gray;">
+</th>
+<th align="center" style="font-weight: bold;border-left: 0px solid black;border-bottom: 1px solid gray;">
+(N=287)
+</th>
+<th align="center" style="font-weight: bold;border-left: 0px solid black;border-bottom: 1px solid gray;">
+(N=570)
+</th>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;background-color: #E0FFFF;">
+age
+</td>
+<td align="center" style="border-left: 0px solid black;background-color: #E0FFFF;">
+68.7 ± 10.7
+</td>
+<td align="center" style="border-left: 0px solid black;background-color: #E0FFFF;">
+60.6 ± 11.2
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;background-color: #E0FFFF;">
+0.000
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+cardiogenicShock
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+0.136
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    No
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+275 (95.8%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+530 (93.0%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    Yes
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+12 ( 4.2%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+40 ( 7.0%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;background-color: #E0FFFF;">
+entry
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E0FFFF;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E0FFFF;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #E0FFFF;">
+0.035
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    Femoral
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+119 (41.5%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+193 (33.9%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    Radial
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+168 (58.5%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+377 (66.1%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;background-color: #E0FFFF;">
+Dx
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E0FFFF;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E0FFFF;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #E0FFFF;">
+0.012
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    NSTEMI
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+50 (17.4%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+103 (18.1%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    STEMI
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+84 (29.3%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+220 (38.6%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    Unstable Angina
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+153 (53.3%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+247 (43.3%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+EF
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+56.3 ± 10.1
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+55.6 ± 9.4
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+0.387
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;background-color: #E0FFFF;">
+height
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E0FFFF;">
+153.8 ± 6.2
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E0FFFF;">
+167.9 ± 6.1
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #E0FFFF;">
+0.000
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;background-color: #E0FFFF;">
+weight
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E0FFFF;">
+57.2 ± 9.3
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E0FFFF;">
+68.7 ± 10.3
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #E0FFFF;">
+0.000
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+BMI
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+24.2 ± 3.6
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+24.3 ± 3.2
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+0.611
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+obesity
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+0.580
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    No
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+194 (67.6%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+373 (65.4%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    Yes
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+93 (32.4%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+197 (34.6%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+TC
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+188.9 ± 51.1
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+183.3 ± 45.9
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+0.124
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+LDLC
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+117.8 ± 41.2
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+116.0 ± 41.1
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+0.561
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+HDLC
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+39.0 ± 11.5
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+37.8 ± 10.9
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+0.145
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+TG
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+119.9 ± 76.2
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+127.9 ± 97.3
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+0.195
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+DM
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+0.077
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    No
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+173 (60.3%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+380 (66.7%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    Yes
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+114 (39.7%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+190 (33.3%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;background-color: #E0FFFF;">
+HBP
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E0FFFF;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E0FFFF;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #E0FFFF;">
+0.000
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    No
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+83 (28.9%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+273 (47.9%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    Yes
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+204 (71.1%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+297 (52.1%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;background-color: #E0FFFF;">
+smoking
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E0FFFF;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E0FFFF;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;background-color: #E0FFFF;">
+0.000
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    Ex-smoker
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+49 (17.1%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+155 (27.2%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    Never
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+209 (72.8%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+123 (21.6%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    Smoker
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+29 (10.1%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+292 (51.2%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td colspan="4" align="left" style="font-size:9pt ;border-top: 1px solid black; border-bottom: hidden;">
+</td>
+</tr>
+</table>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res2&lt;-<span class="kw">mytable</span>(sex<span class="op">+</span>DM<span class="op">~</span>.,<span class="dt">data=</span>acs)
+res2 <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span>ztable <span class="op">%&gt;%</span>
+<span class="st">    </span><span class="kw">addSigColor</span>(<span class="dt">sigp=</span><span class="fl">0.01</span>,<span class="dt">sigcolor=</span><span class="st">&quot;platinum&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">    </span>print</code></pre></div>
+<head>
+<style>
+        table {
+              font-family: times ;
+color:  black ;
+text-align: right;}
+        th {
+              padding: 1px 1px 5px 5px;
+            }
+        td {
+             padding: 1px 1px 5px 5px; }
+      </style>
+</head>
+<table align="center" style="border-collapse: collapse; caption-side:top; font-size:11pt;">
+<caption style="text-align:center;">
+Descriptive Statistics Stratified by ‘SEX’ and ‘DM’
+</caption>
+<tr>
+<td colspan=" 1 " align="center" style="font-weight: bold;border-top: 2px solid gray; border-bottom: hidden; border-left: 0px solid black;">
+</td>
+<td style="border-top: 2px solid gray;border-bottom: hidden">
+ 
+</td>
+<td colspan=" 3 " align="center" style="font-weight: bold;border-top: 2px solid gray; border-bottom: 1px solid gray; border-left: 0px solid black;">
+Male
+</td>
+<td style="border-top: 2px solid gray;border-bottom: hidden">
+ 
+</td>
+<td colspan=" 3 " align="center" style="font-weight: bold;border-top: 2px solid gray; border-bottom: 1px solid gray; border-left: 0px solid black;border-right:0px solid black;">
+Female
+</td>
+</tr>
+<tr>
+<th <th rowspan="2" align="center" style="font-weight: bold;border-left: 0px solid black;border-bottom: 1px solid gray;">
+</th>
+<th style="border-bottom: hidden;">
+ 
+</th>
+<th <th align="center" style="font-weight: bold;border-left: 0px solid black;border-bottom: hidden;">
+No
+</th>
+<th <th align="center" style="font-weight: bold;border-left: 0px solid black;border-bottom: hidden;">
+Yes
+</th>
+<th <th rowspan="2" align="center" style="font-weight: bold;border-left: 0px solid black;border-bottom: 1px solid gray;">
+p
+</th>
+<th style="border-bottom: hidden;">
+ 
+</th>
+<th <th align="center" style="font-weight: bold;border-left: 0px solid black;border-bottom: hidden;">
+No
+</th>
+<th <th align="center" style="font-weight: bold;border-left: 0px solid black;border-bottom: hidden;">
+Yes
+</th>
+<th <th rowspan="2" align="center" style="font-weight: bold;border-left: 0px solid black;border-right:0px solid black;border-bottom: 1px solid gray;">
+p
+</th>
+</tr>
+<tr>
+<th style="border-bottom: 1px solid gray;">
+ 
+</th>
+<th align="center" style="font-weight: bold;border-left: 0px solid black;border-bottom: 1px solid gray;">
+(N=380)
+</th>
+<th align="center" style="font-weight: bold;border-left: 0px solid black;border-bottom: 1px solid gray;">
+(N=190)
+</th>
+<th style="border-bottom: 1px solid gray;">
+ 
+</th>
+<th align="center" style="font-weight: bold;border-left: 0px solid black;border-bottom: 1px solid gray;">
+(N=173)
+</th>
+<th align="center" style="font-weight: bold;border-left: 0px solid black;border-bottom: 1px solid gray;">
+(N=114)
+</th>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;">
+age
+</td>
+<td style>
+</td>
+<td align="center" style="border-left: 0px solid black;">
+60.9 ± 11.5
+</td>
+<td align="center" style="border-left: 0px solid black;">
+60.1 ± 10.6
+</td>
+<td align="center" style="border-left: 0px solid black;">
+0.472
+</td>
+<td style>
+</td>
+<td align="center" style="border-left: 0px solid black;">
+69.3 ± 11.4
+</td>
+<td align="center" style="border-left: 0px solid black;">
+67.8 ± 9.7
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;">
+0.257
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+cardiogenicShock
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+0.685
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+0.296
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    No
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+355 (93.4%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+175 (92.1%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+168 (97.1%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+107 (93.9%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    Yes
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+25 ( 6.6%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+15 ( 7.9%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+5 ( 2.9%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+7 ( 6.1%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+entry
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+0.552
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+0.665
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    Femoral
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+125 (32.9%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+68 (35.8%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+74 (42.8%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+45 (39.5%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    Radial
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+255 (67.1%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+122 (64.2%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+99 (57.2%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+69 (60.5%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+Dx
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+0.219
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+0.240
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    NSTEMI
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+71 (18.7%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+32 (16.8%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+25 (14.5%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+25 (21.9%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    STEMI
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+154 (40.5%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+66 (34.7%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+54 (31.2%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+30 (26.3%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    Unstable Angina
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+155 (40.8%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+92 (48.4%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+94 (54.3%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+59 (51.8%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+EF
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E5E4E2;">
+56.5 ± 8.3
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E5E4E2;">
+53.9 ± 11.0
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E5E4E2;">
+0.007
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+56.0 ± 10.1
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+56.6 ± 10.0
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+0.655
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+height
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+168.1 ± 5.8
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+167.5 ± 6.7
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+0.386
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+153.9 ± 6.5
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+153.6 ± 5.8
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+0.707
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+weight
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+68.1 ± 10.4
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+69.8 ± 10.2
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+0.070
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+56.5 ± 8.7
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+58.4 ± 10.0
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+0.106
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+BMI
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E5E4E2;">
+24.0 ± 3.1
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E5E4E2;">
+24.9 ± 3.5
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E5E4E2;">
+0.005
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+23.8 ± 3.2
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+24.8 ± 4.0
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+0.046
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+obesity
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+0.027
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+0.359
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    No
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+261 (68.7%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+112 (58.9%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+121 (69.9%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+73 (64.0%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    Yes
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+119 (31.3%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+78 (41.1%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+52 (30.1%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+41 (36.0%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+TC
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+184.1 ± 46.7
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+181.8 ± 44.5
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+0.572
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+186.0 ± 43.1
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+193.3 ± 60.8
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+0.274
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+LDLC
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+117.9 ± 41.8
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+112.1 ± 39.4
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+0.115
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+116.3 ± 35.2
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+119.8 ± 48.6
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+0.519
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+HDLC
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+38.4 ± 11.4
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+36.8 ± 9.6
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+0.083
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+39.2 ± 10.9
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+38.8 ± 12.2
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+0.821
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+TG
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E5E4E2;">
+115.2 ± 72.2
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E5E4E2;">
+153.4 ± 130.7
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E5E4E2;">
+0.000
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+114.2 ± 82.4
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+128.4 ± 65.5
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+0.112
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+HBP
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E5E4E2;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E5E4E2;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;background-color: #E5E4E2;">
+0.000
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+0.356
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    No
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+205 (53.9%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+68 (35.8%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+54 (31.2%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+29 (25.4%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    Yes
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+175 (46.1%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+122 (64.2%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+119 (68.8%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+85 (74.6%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+smoking
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+0.386
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+0.093
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    Ex-smoker
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+101 (26.6%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+54 (28.4%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+34 (19.7%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+15 (13.2%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    Never
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+77 (20.3%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+46 (24.2%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+118 (68.2%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+91 (79.8%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td align="left" style="border-left: 0px solid black;border-top: hidden;">
+    Smoker
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+202 (53.2%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+90 (47.4%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+</td>
+<td style="border-top: hidden;">
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+21 (12.1%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-top: hidden;">
+8 ( 7.0%)
+</td>
+<td align="center" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">
+</td>
+</tr>
+<tr>
+<td colspan="9" align="left" style="font-size:9pt ;border-top: 1px solid black; border-bottom: hidden;">
+</td>
+</tr>
+</table>
 </div>
 </div>
 
@@ -17202,7 +19560,7 @@ smoking
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

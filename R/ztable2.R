@@ -3,6 +3,7 @@
 #' @param z An object of ztable
 #' @param rows An integer vector indicating specific rows
 #' @param color A character vector indicating color
+#'@export
 #' @examples
 #' z=ztable(head(iris))
 #' z=addRowColor(z,c(1,3),color="platinum")
@@ -25,6 +26,7 @@ addRowColor=function(z,rows,color){
 #' @param z An object of ztable
 #' @param cols An integer vector indicating specific columns
 #' @param color A character vector indicating color
+#'@export
 #' @examples
 #' z=ztable(head(iris))
 #' z=addColColor(z,c(1,3),color="platinum")
@@ -48,6 +50,7 @@ addColColor=function(z,cols,color){
 #' @param rows An integer vector indicating specific rows
 #' @param cols An integer vector indicating specific columns
 #' @param color A character vector indicating color
+#' @export
 #' @examples
 #' z=ztable(head(iris))
 #' z=addRowColor(z,c(1,3),color="platinum")
@@ -82,11 +85,41 @@ addCellColor=function(z,rows,cols,color){
     z
 }
 
+#' Add column colors of an object of ztable
+#'
+#' @param z An object of ztable
+#' @param rows An integer vector indicating specific rows
+#' @param cols An integer vector indicating specific columns
+#' @param color A character vector indicating color
+#' @export
+#' @examples
+#' z=ztable(head(iris))
+#' z=addFrontColor(z,rows=2:4,cols=c(2,4,6),color=c("red","green","blue"))
+#' z
+addFrontColor=function(z,rows,cols,color){
+    for(i in 1:length(color)) color[i]=validColor(color[i])
+    if(length(cols)>length(color)) color=rep(color,1+length(cols)/length(color))
+
+    for(i in 1:length(rows)) {
+        for(j in 1:length(cols)){
+            z$frontcolor[rows[i],cols[j]]=color[j]
+            result=getspanRowLength(z,rows[i],cols[j])
+            if(!is.null(result)){
+                if(result>1){
+                    for(k in 1:(result-1)) z$frontcolor[(rows[i]+k),cols[j]]=color[j]
+                }
+             }
+        }
+    }
+    z
+}
+
 #' Gets spanRow length
 #'
 #'@param z An object of ztable
 #'@param i An integer indicating the row of specific cell
 #'@param j An integer indicating the column of specific cell
+#'@export
 #'@return row count when spanRow starts, 0 when column spans.
 getspanRowLength=function(z,i,j){
     if(is.null(z$spanRow)) return(NULL)
@@ -106,17 +139,51 @@ getspanRowLength=function(z,i,j){
 #'@param z An object of ztable
 #'@param cgroup A character vector or matrix indicating names of column group. Default value is NULL
 #'@param n.cgroup A integer vector or matrix indicating the numbers of columns included in each cgroup
-#'       Dafault value is NULL
-#'@param cgroupcolor A character vector or matrix indicating the background colors of each cells.
-addcgroup=function(z,cgroup,n.cgroup,cgroupcolor=NULL){
-    if(!is.matrix(cgroup)) cgroup=matrix(cgroup,nrow=1)
-    if(!is.matrix(n.cgroup)) n.cgroup=matrix(n.cgroup,nrow=1)
-    if(is.null(cgroupcolor))
-        cgroupcolor=matrix(rep("white",nrow(cgroup)*(ncol(cgroup)+1)),nrow=nrow(cgroup))
-    if(!is.matrix(cgroupcolor)) cgroupcolor=matrix(cgroupcolor,nrow=1)
-    z$cgroup=cgroup
-    z$n.cgroup=n.cgroup
-    z$cgroupcolor=cgroupcolor
+#'       Default value is NULL
+#'@param color A character vector indicating the font color of each cells.
+#'@param bg A character vector indicating the background color of each cells.
+#'@param top Logical. Whether or not cgroup be placed at top.
+#'@export
+addcgroup=function(z,cgroup,n.cgroup,color="black",bg="white",top=FALSE){
+
+    if(length(color)==1){
+        color=rep(color,length(cgroup)+1)
+    }
+    if(length(bg)==1){
+        bg=rep(bg,length(cgroup)+1)
+    }
+
+    if(length(z$cgroup)==0) {
+        z$cgroup=list()
+        z$cgroup[[1]]=cgroup
+        z$cgroupcolor=list()
+        z$cgroupcolor[[1]]=color
+        z$cgroupbg=list()
+        z$cgroupbg[[1]]=bg
+        z$n.cgroup=list()
+        z$n.cgroup[[1]]=n.cgroup
+    } else{
+        if(top){
+            no=length(z$cgroup)
+            for(i in no:1){
+                z$cgroup[[no+1]]=z$cgroup[[no]]
+                z$cgroupcolor[[no+1]]=z$cgroupcolor[[no]]
+                z$cgroupbg[[no+1]]=z$cgroupbg[[no]]
+                z$n.cgroup[[no+1]]=z$n.cgroup[[no]]
+            }
+            z$cgroup[[1]]=cgroup
+            z$cgroupcolor[[1]]=color
+            z$cgroupbg[[1]]=bg
+            z$n.cgroup[[1]]=n.cgroup
+        } else{
+            no=length(z$cgroup)+1
+            z$cgroup[[no]]=cgroup
+            z$cgroupcolor[[no]]=color
+            z$cgroupbg[[no]]=bg
+            z$n.cgroup[[no]]=n.cgroup
+        }
+    }
+
     z
 }
 
@@ -125,9 +192,12 @@ addcgroup=function(z,cgroup,n.cgroup,cgroupcolor=NULL){
 #'@param z An object of ztable
 #'@param rgroup A character vector indicating names of row group. Default value is NULL
 #'@param n.rgroup A integer vector indicating the numbers of rows included in each rgroup
-#'       Dafault value is NULL
+#'       Default value is NULL
 #'@param cspan.rgroup An integer indicating the column span of rgroup
-addrgroup=function(z,rgroup,n.rgroup,cspan.rgroup=NULL){
+#'@param color A character vector indicating the font color of rgroup.
+#'@param bg A character vector indicating the background color of rgroup.
+#'@export
+addrgroup=function(z,rgroup,n.rgroup,cspan.rgroup=NULL,color="black",bg="white"){
     if(is.null(rgroup)) return(z)
     for(i in 1:length(rgroup)) {
         if(is.na(rgroup[i])) rgroup[i]=""
@@ -135,7 +205,11 @@ addrgroup=function(z,rgroup,n.rgroup,cspan.rgroup=NULL){
     z$rgroup=rgroup
     z$n.rgroup=n.rgroup
     z$cspan.rgroup=cspan.rgroup
-    if(is.null(z$colcolor)) z$colcolor=rep("white",ncol(z$cellcolor))
+    if(length(bg)==1) bg=rep(bg,length(rgroup))
+    if(length(color)==1) color=rep(color,length(rgroup))
+    z$colcolor=rep(bg,ncol(z$cellcolor))
+    z$rgroupcolor=color
+    z$rgroupbg=bg
     z
 }
 
@@ -143,15 +217,16 @@ addrgroup=function(z,rgroup,n.rgroup,cspan.rgroup=NULL){
 #'
 #' @param z An object of class ztable
 #' @return A vector indicating the position of colgroup
+#'@export
 colGroupCount=function(z){
     if(is.null(z$cgroup)) return(NULL)
     if(is.null(z$n.cgroup)) return(NULL)
     result=c()
-    for(i in 1:nrow(z$n.cgroup)){
+    for(i in 1:length(z$n.cgroup)){
         count=0
-        for(j in 1:ncol(z$n.cgroup)) {
-            if(is.na(z$n.cgroup[i,j])) break
-            count=count+z$n.cgroup[i,j]
+        for(j in 1:length(z$n.cgroup[[i]])) {
+            if(is.na(z$n.cgroup[[i]][j])) break
+            count=count+z$n.cgroup[[i]][j]
             result=c(result,count)
         }
     }
@@ -163,27 +238,29 @@ colGroupCount=function(z){
 #'
 #' @param z An object of ztable
 #' @return A matrix indicating the column span occupied by each colgroup
+#' @export
 cGroupSpan=function(z){
-    vlines=align2lines(z$align)
-    colCount=colGroupCount(z)
+    (vlines=align2lines(z$align))
+    (colCount=colGroupCount(z))
 
     newCount=c()
 
     for(i in 1:length(colCount)) {
         if(vlines[colCount[i]+2]==0) newCount=c(newCount,colCount[i])
     }
+    newCount
     if(is.null(newCount)) return(z$n.cgroup)
     result=z$n.cgroup
-    for(i in 1:nrow(z$n.cgroup)){
+    for(i in 1:length(z$n.cgroup)){
         start=0
-        for(j in 1:ncol(z$n.cgroup)) {
-            if(is.na(z$n.cgroup[i,j])) break
-            end=start+z$n.cgroup[i,j]
+        for(j in 1:length(z$n.cgroup[[i]])) {
+            if(is.na(z$n.cgroup[[i]][j])) break
+            end=start+z$n.cgroup[[i]][j]
             count=0
             for(k in 1:length(newCount)){
                 if(newCount[k]>start & newCount[k]<end) count=count+1
             }
-            result[i,j]=result[i,j]+count
+            result[[i]][j]=result[[i]][j]+count
             #cat("start=",start,",end=",end,",result[",i,",",j,"]=",result[i,j],"\n")
             start=end
         }
@@ -191,10 +268,10 @@ cGroupSpan=function(z){
     result
 }
 
-
 #' Print the head of latex table if the object of ztable has a colgroup
 #'
 #' @param z An object of ztable
+#' @export
 printLatexHead=function(z){
     if(is.null(z$cgroup)) return
     if(is.null(z$n.cgroup)) return
@@ -207,30 +284,33 @@ printLatexHead=function(z){
     #vlines=align2lines(getNewAlign(z))
     #vlines
 
-    for(i in 1:nrow(z$cgroup)){
+    for(i in 1:length(z$cgroup)){
             colSum=0
             linecount=1
             if(z$include.rownames) {
-                firstrow=cat(paste("\\cellcolor{",z$cgroupcolor[i,1],"} &",sep=""))
+                firstrow=cat(paste("\\cellcolor{",z$cgroupbg[[i]][1],"} &",sep=""))
                 colSum=1
                 linecount=1
             }
-            for(j in 1:ncol(z$cgroup)) {
-                if(is.na(z$cgroup[i,j])) break
+            for(j in 1:length(z$cgroup[[i]])) {
+                if(is.na(z$cgroup[[i]][j])) break
                 mcalign="c"
                 if((j==1) & (addrow==0) & (vlines[linecount+1]>0))
                     for(k in 1:vlines[linecount+1]) mcalign=paste("|",mcalign,sep="")
-                end=colSum+cGroupSpan[i,j]+1
-                linecount=linecount+z$n.cgroup[i,j]
+                end=colSum+cGroupSpan[[i]][j]+1
+                linecount=linecount+z$n.cgroup[[i]][j]
                 if(vlines[linecount+1]>0)
                     for(k in 1:vlines[linecount+1]) mcalign=paste(mcalign,"|",sep="")
-                second=paste("\\multicolumn{",cGroupSpan[i,j],"}{",mcalign,"}{",sep="")
-                colSum=colSum+cGroupSpan[i,j]
-                if(z$cgroupcolor[i,j+1]!="white")
-                    second=paste(second,"\\cellcolor{",z$cgroupcolor[i,j+1],"}",sep="")
+                second=paste("\\multicolumn{",cGroupSpan[[i]][j],"}{",mcalign,"}{",sep="")
+                colSum=colSum+cGroupSpan[[i]][j]
+                if(z$cgroupbg[[i]][j+1]!="white")
+                    second=paste(second,"\\cellcolor{",z$cgroupbg[[i]][j+1],"}",sep="")
+                if(z$cgroupcolor[[i]][j+1]!=z$color) {
+                    second=paste(second,"\\color{",z$cgroupcolor[[i]][j+1],"}",sep="")
+                }
                 if(z$colnames.bold)
-                    second=paste(second,"\\textbf{",z$cgroup[i,j],"}}",sep="")
-                else second=paste(second,z$cgroup[i,j],"}",sep="")
+                    second=paste(second,"\\textbf{",z$cgroup[[i]][j],"}}",sep="")
+                else second=paste(second,z$cgroup[[i]][j],"}",sep="")
 
                 if(j!=1) second=paste("&",second,sep="")
                 cat(second)
@@ -239,13 +319,13 @@ printLatexHead=function(z){
             cat("\\\\ \n")
             colSum=addrow+1
             start=1
-            for(j in 1:ncol(z$cgroup)) {
-                if(is.na(z$cgroup[i,j])) break
-                if(z$cgroup[i,j]!="")
-                    cat(paste("\\cline{",colSum,"-",colSum+cGroupSpan[i,j]-1,"}",sep=""))
-                colSum=colSum+cGroupSpan[i,j]
-                start=start+z$n.cgroup[i,j]
-                if(j < ncol(z$cgroup)) if(vlines[start+1]==0) colSum=colSum+1
+            for(j in 1:length(z$cgroup[[i]])) {
+                if(is.na(z$cgroup[[i]][j])) break
+                if(z$cgroup[[i]][j]!="")
+                    cat(paste("\\cline{",colSum,"-",colSum+cGroupSpan[[i]][j]-1,"}",sep=""))
+                colSum=colSum+cGroupSpan[[i]][j]
+                start=start+z$n.cgroup[[i]][j]
+                if(j < length(z$cgroup[[i]])) if(vlines[start+1]==0) colSum=colSum+1
 
             }
             cat("\n")
@@ -277,6 +357,7 @@ totalCol=function(z){
 #' @param from An integer indicating start column of merging data cell
 #' @param to An integer indicating end column of merging data cell
 #' @param color An optional character indicating the background color of merging cell
+#' @export
 spanCol=function(z,row,from,to,color=NULL){
     if(length(row)!=1) {
         warning("Only one row is permitted")
@@ -305,6 +386,7 @@ spanCol=function(z,row,from,to,color=NULL){
 #' @param from An integer indicating start row of merging data cell
 #' @param to An integer indicating end row of merging data cell
 #' @param color An optional character indicating the background color of merging cell
+#' @export
 spanRow=function(z,col,from,to,color=NULL){
     if(length(row)!=1) {
         warning("Only one row is permitted")
@@ -325,7 +407,7 @@ spanRow=function(z,col,from,to,color=NULL){
     z
 }
 
-#' Idetify the spanCol status of a cell
+#' Identify the spanCol status of a cell
 #'
 #'@param z An object of ztable
 #'@param i An integer indicating the row of specific cell
@@ -410,13 +492,13 @@ isspanRow=function(z,i,j){
     return(NULL)
 }
 
-#'Gets the spanRaw start column
+#'Gets the spanRow start column
 #'
 #'@param z An object of ztable
 #'@param i An integer indicating the row of specific cell
 #'@param j An integer indicating the column of specific cell
 #'
-#'@return An integer indicating column where spanRaw start. This function is for latex
+#'@return An integer indicating column where spanRow start. This function is for latex
 #'        multirow
 getspanRowData=function(z,i,j){
     for(k in 1:nrow(z$spanRow)) {
@@ -459,6 +541,7 @@ getNewSpanRow=function(z){
 #' @param start An integer indicating start column position
 #' @param length An integer indicating spanCol length
 #' @param colCount An integer vector calculating from colGroupCount()
+#' @export
 isGroupCol=function(start,length,colCount){
 
     if(is.null(colCount)) return(0)
@@ -474,10 +557,11 @@ isGroupCol=function(start,length,colCount){
     else return(0)
 }
 
-#' Add a adjunctive name below colummn name in a ztable
+#' Add a adjunctive name below column name in a ztable
 #'
 #'@param z An object of ztable
 #'@param subcolnames A charactor vector
+#'@export
 addSubColNames=function(z,subcolnames){
     if(length(subcolnames)!=length(z$x))
         warning("length of subconames is different from length of z$x")
@@ -485,3 +569,35 @@ addSubColNames=function(z,subcolnames){
     z
 }
 
+#' Add row color or cellcolor for rows or cells of p-value less than sigp in a ztable
+#'
+#'@param z An object of ztable
+#'@param sigp A p-value
+#'@param sigcolor A character indicating color
+#'@export
+addSigColor=function(z,sigp=0.05,sigcolor="lightcyan"){
+
+    if("ztable.mytable" %in% class(z))  {
+        if(is.null(z$cgroup)){
+            below05=which(as.numeric(z$x[[ncol(z$x)]])<sigp)+1
+            if(length(below05)>0)
+                z1=addRowColor(z,rows=below05,color=sigcolor)
+        } else{
+            count=length(z$cgroup[[1]])-1
+            count
+            colpergroup=(ncol(z$x)-1)/count
+            colpergroup
+            z1<-z
+            for(i in 2:(count+1)){
+                pcol=1+colpergroup*(i-1)
+                below05=which(as.numeric(z$x[[pcol]])<sigp)+1
+                if(length(below05)>0) for(j in 1:length(below05))
+                    z1=addCellColor(z1,rows=below05[j],
+                                   cols=(pcol+1-(colpergroup-1)):(pcol+1),color=sigcolor)
+
+            }
+        }
+    }
+    else z1=z
+    z1
+}

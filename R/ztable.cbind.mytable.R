@@ -4,6 +4,7 @@
 #'@param digits Numeric vector of length equal to one (in which case it will be
 #'       replicated as necessary) or to the number of columns of the resulting table
 #'@param ... arguments to be passed to \code{\link{ztable_sub}}
+#'@export
 #'@examples
 #'require(moonBook)
 #'res=mytable(sex+DM~.,data=acs)
@@ -45,6 +46,7 @@ ztable.cbind.mytable=function(x,digits=NULL,...){
     n.cgroup=c(1,rep(count-1,length(x)))
     z=addcgroup(z,cgroup=cgroup,n.cgroup)
     z=vlines(z,type=0)
+    class(z)=c("ztable","ztable.mytable","ztable.cbind.mytable")
     z
 }
 

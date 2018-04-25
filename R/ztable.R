@@ -5,18 +5,21 @@
 #'@param digits Numeric vector of length equal to one (in which case it will be
 #'       replicated as necessary) or to the number of columns of the resulting table
 #' @param ... arguments to be passed to \code{\link{ztable_sub}}
+#' @export
 ztable=function(x,digits=NULL,...)  UseMethod("ztable")
 
-#'@describeIn ztable
-#'
+
+#'@describeIn ztable Default method of ztable
+#'@export
 ztable.default=function(x,digits=NULL,...){
   cat(paste("\n Sorry, Currently function ztable() cannot handle",
       " the object of class ",class(x),"!\n",sep=""))
   invisible()
 }
 
-#'@describeIn ztable
-#'
+
+#'@describeIn ztable  Makes a ztable for class 'data.frame'
+#'@export
 ztable.data.frame=function(x,digits=NULL,...){
     z=ztable_sub(x,digits=digits,...)
     class(z) <-c("ztable")
@@ -27,6 +30,7 @@ ztable.data.frame=function(x,digits=NULL,...){
 #'
 #' Exporting "data.frame" to an object of class "ztable"
 #'@param x A data.frame
+#'@param family Font family. Default value is NULL. Possible value is one of the c("serif","times").
 #'@param size An integer from 1 to 10 indicating font size= c("tiny","scriptsize",
 #'       "footnotesize","small","normalsize","large","Large","LARGE","huge","Huge")
 #'       respectively. Defaulting is 5(= "normalsize").
@@ -44,7 +48,7 @@ ztable.data.frame=function(x,digits=NULL,...){
 #'@param position The table will be have placed at the center of the paper
 #'        if position is "center" or "c", and at the left side of the paper
 #'        if it equals "left" or "l", and at the right side of the paper
-#'        if it equals "right" or "r". The position is translated to specificed
+#'        if it equals "right" or "r". The position is translated to specific
 #'        latex environments such as "flushright" or "flushleft" or "center"
 #'        (provided as a character vector) will enclose the tabular environment.
 #'        Default value is "center".
@@ -86,7 +90,7 @@ ztable.data.frame=function(x,digits=NULL,...){
 #'       "wraptable". Requires Latex "wrapfig" package in preamble.
 #'       Default value is FALSE.
 #'@param rotate Logical value whether or not set the tabular environment=
-#'       "rotate". No special arrangement is made to find space for the resut.
+#'       "rotate". No special arrangement is made to find space for the result.
 #'       Requires Latex "rotating" package in preamble.
 #'       If TRUE, requires the rotate angle(counterclockwise).
 #'       Default value is FALSE.
@@ -120,7 +124,7 @@ ztable.data.frame=function(x,digits=NULL,...){
 #'       that should be added as a prefix at the colnames row.
 #'@param zebra Null or an integer of 0 or 1 or 2 or 3. The arguments zebra and zebra.color are
 #'       used to make a Zebra striping table(table with alternating background colors)
-#'       easly. A value of 1 sets background color of all odd rows/columns with specified with
+#'       easily. A value of 1 sets background color of all odd rows/columns with specified with
 #'       zebra.color. A value of 2 sets all even rows/columns. A value of 0 sets
 #'       background colors of all rows/columns with colors specified with zebra.color.
 #'       When zebra is 1 or 2, the parameters of prefix.rows and commands ignored.
@@ -128,7 +132,7 @@ ztable.data.frame=function(x,digits=NULL,...){
 #'       and addCellColor functions.
 #'       Default is NULL.
 #'@param zebra.color A color name or a numeric value indicating pre-defined color.
-#'       When parameter zebra is 0 or 1 or 2 and zebra.color is NULL, then zerba.color
+#'       When parameter zebra is 0 or 1 or 2 and zebra.color is NULL, then zebra.color
 #'       is set to "platinum". Numeric values between 1 to 13 is converted to
 #'       predefined color names. The predefined color names are c("peach","peach-orange",
 #'       "peachpuff","peach-yellow","pear","pearl","peridot","periwinkle","pastelred",
@@ -143,16 +147,16 @@ ztable.data.frame=function(x,digits=NULL,...){
 #'       Default value is 1.
 #'@param zebra.list A list consists of y,x,color. zebra.list is used only when zebra.type=3.
 #'       zebra.list sets the cells specified with rows of vector "y" and columns of vector "x" with "color".
-#'       The y and x are integer vactor indicating rows and columns. NA value of y or x indicating all columns or rows.
+#'       The y and x are integer vector indicating rows and columns. NA value of y or x indicating all columns or rows.
 #'       The color is an character vector consists of names of color.
 #'@param colnames.bold whether or not use bold font for column names, Default value is FALSE
 #'@param include.colnames Logical. If TRUE the column names is printed. Default value is TRUE.
 #'@param cgroup A character vector or matrix indicating names of column group. Default value is NULL
 #'@param n.cgroup A integer vector or matrix indicating the numbers of columns included in each cgroup
-#'       Dafault value is NULL
+#'       Default value is NULL
 #'@param rgroup A character vector indicating names of row group. Default value is NULL
 #'@param n.rgroup A integer vector indicating the numbers of rows included in each rgroup
-#'       Dafault value is NULL
+#'       Default value is NULL
 #'@param cspan.rgroup The number of columns that an rgroup should span. It spans by default all
 #'       columns but you may want to limit this if you have column colors that you want to retain.
 #'@examples
@@ -180,6 +184,7 @@ ztable.data.frame=function(x,digits=NULL,...){
 #' ztable(head(mtcars),zebra=1)
 #' ztable(head(mtcars),zebra=1,zebra.type=2)
 ztable_sub=function(x,
+                    family=NULL,
                     size=5, # normal size, range 1-10
                     color=getOption("ztable.color","black"),
                     tablewidth=0.3,
@@ -284,6 +289,7 @@ ztable_sub=function(x,
     }
     cellcolor=make.cell.color(x,zebra,zebra.color,zebra.type,zebra.list,
                               zebra.colnames,zebra.rownames)
+    frontcolor=make.frontcolor(x,color)
     if(!is.null(prefix.rows) & (length(commands)==1))
         commands=rep(commands,nrow)
     if((0 %in% prefix.rows) & is.null(top.command) &(length(commands)>0))
@@ -292,7 +298,9 @@ ztable_sub=function(x,
     else if(size<0 | size>10) size=5
 
     result=list(x=x,
+                family=family,
                 cellcolor=cellcolor,
+                frontcolor=frontcolor,
                 size=size,
                 color=color,
                 tablewidth=tablewidth,
@@ -346,13 +354,13 @@ ztable_sub=function(x,
 #'@param x a data.frame
 #'@param zebra Null or an integer of 0 or 1 or 2. The arguments zebra and zebra.color are
 #'       used to make a Zebra striping table(table with alternating background colors)
-#'       easly. A value of 1 sets background color of all odd rows/columns with specified with
+#'       easily. A value of 1 sets background color of all odd rows/columns with specified with
 #'       zebra.color. A value of 2 sets all even rows/columns. A value of 0 sets
 #'       background colors of all rows/columns with colors specified with zebra.color.
 #'       When zebra is 1 or 2, the parameters of prefix.rows and commands ignored.
 #'       Default is NULL.
 #'@param zebra.color A color name or a numeric value indicating pre-defined color.
-#'       When parameter zebra is 0 or 1 or 2 and zebra.color is NULL, then zerba.color
+#'       When parameter zebra is 0 or 1 or 2 and zebra.color is NULL, then zebra.color
 #'       is set to "platinum". Numeric values between 1 to 13 is converted to
 #'       predefined color names. The predefined color names are c("peach","peach-orange",
 #'       "peachpuff","peach-yellow","pear","pearl","peridot","periwinkle","pastelred",
@@ -363,7 +371,7 @@ ztable_sub=function(x,
 #'       Default value is 1.
 #'@param zebra.list A list consists of y,x,color. zebra.list is used only when zebra.type=3.
 #'       zebra.list sets the cells specified with rows of vector "y" and columns of vector "x" with "color".
-#'       The y and x are integer vactor indicating rows and columns. NA value of y or x indicating all columns or rows.
+#'       The y and x are integer vector indicating rows and columns. NA value of y or x indicating all columns or rows.
 #'       The color is an character vector consists of names of color.
 #'@param zebra.colnames whether or not use background colors in column names row,
 #'       Default value is FALSE
@@ -465,6 +473,19 @@ make.cell.color=function(x,zebra,zebra.color,zebra.type,zebra.list,
     cellcolor
 }
 
+#' Make a data.frame named "cellcolor" from ztable call
+#'
+#'@param x A data.frame
+#'@param color A character string
+make.frontcolor=function(x,color="black"){
+    temp=rep(color,nrow(x)+1)
+    frontcolor=c()
+    for(i in 1:(ncol(x)+1)) frontcolor=cbind(frontcolor,temp)
+    colnames(frontcolor)=c(" ",colnames(x))
+    rownames(frontcolor)=c(" ",rownames(x))
+    frontcolor
+}
+
 #' Make vector x from vector color
 #'
 #' Internal function of make.cell.color
@@ -481,6 +502,7 @@ repColor=function(x,color){
 #'
 #'Update options of ztable before print
 #'@param z An object of class "ztable"
+#'@param family Font family. Default value is NULL. Possible value is one of the c("serif","times").
 #'@param size An integer from 1 to 10 indicating font size= c("tiny","scriptsize",
 #'       "footnotesize","small","normalsize","large","Large","LARGE","huge","Huge")
 #'       respectively.
@@ -494,7 +516,7 @@ repColor=function(x,color){
 #'@param position The table will be have placed at the center of the paper
 #'        if position is "center" or "c", and at the left side of the paper
 #'        if it equals "left" or "l", and at the right side of the paper
-#'        if it equals "right" or "r". The position is translated to specificed
+#'        if it equals "right" or "r". The position is translated to specific
 #'        latex environments such as "flushright" or "flushleft" or "center"
 #'        (provided as a character vector) will enclose the tabular environment.
 #'@param show.heading A logical value whether or not include headings in the table.
@@ -529,7 +551,7 @@ repColor=function(x,color){
 #'@param wraptable Logical value whether or not set the tabular environment=
 #'       "wraptable". Requires Latex "wrapfig" package in preamble.
 #'@param rotate Logical value whether or not set the tabular environment=
-#'       "rotate". No special arrangement is made to find space for the resut.
+#'       "rotate". No special arrangement is made to find space for the result.
 #'       Requires Latex "rotating" package in preamble.
 #'       If TRUE, requires the rotate angle(counterclockwise).
 #'@param turn Logical value whether or not set the tabular environment=
@@ -559,11 +581,11 @@ repColor=function(x,color){
 #'       that should be added as a prefix at the colnames row.
 #'@param zebra Null or a integer of 1 or 2. The arguments zebra and zebra.color are
 #'       used to make a Zebra striping table(table with alternating background colors)
-#'       easly. A value of 1 sets background color of all odd rows with specified with
+#'       easily. A value of 1 sets background color of all odd rows with specified with
 #'       zebra.color. A value of 2 sets all even rows. when zebra is 1 or 2,
 #'       the parameters of prefix.rows and commands ignored.
 #'@param zebra.color A color name or a numeric value indicating pre-defined color.
-#'       When parameter zebra is 0 or 1 or 2 and zebra.color is NULL, then zerba.color
+#'       When parameter zebra is 0 or 1 or 2 and zebra.color is NULL, then zebra.color
 #'       is set to "platinum". Numeric values between 1 to 13 is converted to
 #'       predefined color names. The predefined color names are c("peach","peach-orange",
 #'       "peachpuff","peach-yellow","pear","pearl","peridot","periwinkle","pastelred",
@@ -583,13 +605,15 @@ repColor=function(x,color){
 #'@param include.colnames Logical. If TRUE the column names is printed.
 #'@param cgroup A character vector or matrix indicating names of column group. Default value is NULL
 #'@param n.cgroup A integer vector or matrix indicating the numbers of columns included in each cgroup
-#'       Dafault value is NULL
+#'       Default value is NULL
 #'@param rgroup A character vector indicating names of row group. Default value is NULL
 #'@param n.rgroup A integer vector indicating the numbers of rows included in each rgroup
-#'       Dafault value is NULL
+#'       Default value is NULL
 #'@param cspan.rgroup The number of columns that an rgroup should span. It spans by default all
 #'       columns but you may want to limit this if you have column colors that you want to retain.
+#'@export
 update_ztable=function(z,
+                       family=NULL,
                        size=NULL, # normal size, range 1-10
                        color=NULL,
                        tablewidth=NULL,
@@ -627,6 +651,7 @@ update_ztable=function(z,
                        n.rgroup=NULL,
                        cspan.rgroup=NULL){
 
+     if(!is.null(family)) z$family=family
      if(!is.null(size)) z$size=size
      if(!is.null(color)) z$color=color
      if(!is.null(tablewidth)) z$tablewidth=tablewidth
@@ -687,6 +712,7 @@ update_ztable=function(z,
 #'
 #' @param x An object of class "ztable"
 #' @param ... further argument passed to other function
+#' @export
 print.ztable=function(x,...){
     z=update_ztable(z=x,...)
     print_ztable(z)
@@ -830,8 +856,28 @@ ztable2latex=function(z,xdata){
     else if(z$turn) sort="turn"
     else sort="table"
     headingsize=ifelse(z$size>3,z$size-2,1)
-    define_colors(z$cellcolor)
-    if(!is.null(z$cgroupcolor)) define_colors(z$cgroupcolor)
+    z$cellcolor=define_colors(z$cellcolor)
+    start=attr(z$cellcolor,"no")
+    z$frontcolor=define_colors(z$frontcolor,no=start)
+    start=attr(z$frontcolor,"no")
+    if(!is.null(z$cgroupcolor)) {
+        for(i in 1:length(z$cgroupcolor)){
+            z$cgroupcolor[[i]]=define_colors(z$cgroupcolor[[i]],no=start)
+            start=attr(z$cgroupcolor[[i]],"no")
+        }
+    }
+    if(!is.null(z$cgroupbg)) {
+        for(i in 1:length(z$cgroupbg)){
+            z$cgroupbg[[i]]=define_colors(z$cgroupbg[[i]],no=start)
+            start=attr(z$cgroupbg[[i]],"no")
+        }
+    }
+
+    if(!is.null(z$rgroupcolor)) z$rgroupcolor=define_colors(z$rgroupcolor,no=start)
+    start=attr(z$rgroupcolor,"no")
+    if(!is.null(z$rgroupbg)) z$rgroupbg=define_colors(z$rgroupbg,no=start)
+    start=attr(z$rgroupbg,"no")
+
     align=alignCheck(z$align,ncount,addrow)
     if(z$longtable){
         cat(paste("\\color{",z$color,"}\n",sep=""))
@@ -851,10 +897,20 @@ ztable2latex=function(z,xdata){
             cat(paste("\\begin{",sort,"}[",z$placement,"]\n",sep=""))
             cat(paste("\\begin{",z$position,"}\n",sep=""))
         }
+        if(!is.null(z$family)){
+            if(z$family=="serif") cat("\\sffamily\n")
+            else if(z$family=="times") cat("\\rmfamily\n")
+            else if(z$family=="tt") cat("\\ttfamily\n")
+            else {
+                temp=paste0("\\",z$family,"\n")
+                cat(temp)
+            }
+        }
         cat(paste("\\begin{",Fontsize[z$size],"}\n",sep=""))
         cat(paste("\\color{",z$color,"}\n",sep=""))
         cat(paste("\\begin{tabular}{",NewAlign,"}\n",sep=""))
     }
+
     if(!is.null(z$caption) & z$caption.placement=="top"){
         mycaption=caption2minipage(z,z$caption)
         cat(paste("\\multicolumn{",totalCol,"}{",
@@ -884,6 +940,7 @@ ztable2latex=function(z,xdata){
         else firstcn=cn[1]
         if(z$colnames.bold) firstcn=paste("\\textbf{",firstcn,"}",sep="")
 
+        if(z$frontcolor[1,2]!=z$color) firstcn=paste("\\color{",z$frontcolor[1,2],"}",firstcn,sep="")
         if(z$cellcolor[1,2]!="white") firstcn=paste("\\cellcolor{",z$cellcolor[1,2],"}",firstcn,sep="")
         if(z$include.rownames) {
 
@@ -896,6 +953,7 @@ ztable2latex=function(z,xdata){
             } else first=""
             if(z$cellcolor[1,1]!="white")
                 first=paste("\\cellcolor{",z$cellcolor[1,1],first,"}",sep="")
+
             firstrow=paste(first,"&",firstcn,sep="")
 
         }
@@ -911,6 +969,8 @@ ztable2latex=function(z,xdata){
                 }
                 if(z$cellcolor[1,i+1]!="white")
                     firstrow=paste(firstrow,"\\cellcolor{",z$cellcolor[1,i+1],"}",sep="")
+                if(z$frontcolor[1,i+1]!=z$color)
+                    firstrow=paste(firstrow,"\\color{",z$frontcolor[1,i+1],"}",sep="")
                 if(z$colnames.bold) boldcn=paste("\\textbf{",cn[i],"}",sep="")
                 else boldcn=cn[i]
                 result=1
@@ -955,6 +1015,8 @@ ztable2latex=function(z,xdata){
                 if(is.na(z$subcolnames[i])) {
                     temp=paste("\\multirow{-2}{*}{",colnames(z$x)[i],"}",sep="")
                     if(!is.null(z$colcolor)){
+                        if(z$frontcolor[1,i+1]!=z$color)
+                            temp=paste("\\color{",z$frontcolor[1,i+1],"}",temp,sep="")
                         if(z$cellcolor[1,i+1]!="white")
                             temp=paste("\\cellcolor{",z$cellcolor[1,i+1],"}",temp,sep="")
                     }
@@ -1011,10 +1073,15 @@ ztable2latex=function(z,xdata){
         }
         tempo=NULL
         if(z$include.rownames) {
-            if(z$cellcolor[i+1,1]=="white") tempo=rownames(z$x)[i]
-            else tempo=paste("\\cellcolor{",z$cellcolor[i+1,1],"}",
-                            rownames(z$x)[i],sep="")
-
+            tempo=rownames(z$x)[i]
+            if(z$frontcolor[i+1,1]!=z$color) {
+                tempo=paste("\\color{",z$frontcolor[i+1,1],"}",
+                            tempo,sep="")
+            }
+            if(z$cellcolor[i+1,1]!="white") {
+                tempo=paste("\\cellcolor{",z$cellcolor[i+1,1],"}",
+                            tempo,sep="")
+            }
             if(!is.null(isspanCol(z,(i+1),1)))
                 tempo=paste("\\multicolumn{",isspanCol(z,i+1,1),"}{c}{",tempo,"}",sep="")
             else if(!is.null(isspanRow(z,(i+1),1))){
@@ -1026,10 +1093,13 @@ ztable2latex=function(z,xdata){
 
         for(j in 1:ncount) {
             skip=0
-            if(z$cellcolor[i+1,j+1]=="white") temp1=xdata[i,j]
-            else temp1=paste("\\cellcolor{",z$cellcolor[i+1,j+1],"}",
+            if(z$frontcolor[i+1,j+1]==z$color) temp1=xdata[i,j]
+            else temp1=paste("\\color{",z$frontcolor[i+1,j+1],"}",
                              xdata[i,j],sep="")
-
+            if(z$cellcolor[i+1,j+1]!="white") {
+                temp1=paste("\\cellcolor{",z$cellcolor[i+1,j+1],"}",
+                             temp1,sep="")
+            }
             if(is.null(isspanCol(z,(i+1),(j+1)))){
                 if(is.null(isspanRow(z,(i+1),(j+1)))){
                     result=1
@@ -1197,16 +1267,25 @@ if(i %in% printrgroup) {
         if(vlines[totalCol+1]>0)
             for(k in 1:vlines[totalCol+1]) mcalign=paste(mcalign,"|",sep="")
         temp=paste("\\multicolumn{",totalCol,"}{",mcalign,"}{",sep="")
-        if(z$colcolor[1]!="white")
-            temp=paste(temp,"\\cellcolor{",z$colcolor[1],"}",sep="")
+        # if(z$colcolor[1]!="white")
+        #     temp=paste(temp,"\\cellcolor{",z$colcolor[1],"}",sep="")
+        if(z$rgroupbg[rgroupcount]!="white")
+            temp=paste(temp,"\\cellcolor{",z$rgroupbg[rgroupcount],"}",sep="")
+        if(z$rgroupcolor[rgroupcount]!="black")
+            temp=paste(temp,"\\color{",z$rgroupcolor[rgroupcount],"}",sep="")
         temp=paste(temp,"\\textbf{",z$rgroup[rgroupcount],"}}",sep="")
         printcline=totalCol
     }
     else {
         if(z$cspan.rgroup==1) {
-            if(z$colcolor[1]!="white")
-                temp=paste("\\cellcolor{",z$colcolor[1],"}",sep="")
-            else temp=""
+            # if(z$colcolor[1]!="white")
+            #     temp=paste("\\cellcolor{",z$colcolor[1],"}",sep="")
+            # else temp=""
+            temp=""
+            if(z$rgroupbg[rgroupcount]!="white")
+                temp=paste(temp,"\\cellcolor{",z$rgroupbg[rgroupcount],"}",sep="")
+            if(z$rgroupcolor[rgroupcount]!="black")
+                temp=paste(temp,"\\color{",z$rgroupcolor[rgroupcount],"}",sep="")
             temp=paste(temp,"\\textbf{",z$rgroup[rgroupcount],"}",sep="")
             for(j in 1:(ncount+addrow-1)){
                 temp1=""
@@ -1250,7 +1329,8 @@ if(i %in% printrgroup) {
             if(nvlines[printcline+1]>0)
                 for(k in 1:nvlines[printcline+1]) mcalign=paste(mcalign,"|",sep="")
             temp=paste("\\multicolumn{",z$cspan.rgroup,"}{",mcalign,"}{\\textbf{",
-                       "\\cellcolor{",z$colcolor[1],"}",
+                       "\\cellcolor{",z$rgroupbg[rgroupcount],"}",
+                       "\\color{",z$rgroupcolor[rgroupcount],"}",
                        z$rgroup[rgroupcount],"}}",sep="")
             #temp=paste("\\cellcolor{",z$colcolor[1],"}",temp,sep="")
             if(z$cspan.rgroup<(ncount+addrow)) {
@@ -1316,7 +1396,9 @@ validColor=function(a,mycolor){
 #' @return a valid Latex color name
 validColor2=function(a){
     if(!is.character(a)) a="peach"
-    else{
+    else if(substr(a,1,1)=="#"){
+        a=a
+    } else {
         result=grep(paste("^",a,sep=""),ztable::zcolors$name,ignore.case=TRUE)
         if(length(result)>0) a=ztable::zcolors$name[result[1]]
         else a="peach"
@@ -1327,18 +1409,44 @@ validColor2=function(a){
 #' Define colors
 #'
 #' Define colors of mycolors
-#' @param mycolors chracters vectors of color names
-define_colors=function(mycolors) {
+#' @param mycolors characters vectors of color names
+#' @param no An integer indicating start number
+#' @export
+define_colors=function(mycolors,no=1) {
     if(is.null(mycolors)) return
     uniquecolors=unique(as.vector(unique(mycolors)))
+    uniquecolors
+    count=no
     for(i in 1:length(uniquecolors)) {
         if(uniquecolors[i]=="white") next
+        if(substr(uniquecolors[i],1,1)=="#") {
+                definition=hex2rgbDef(uniquecolors[i],no=count)
+                cat(definition,"\n")
+                mycolors[mycolors==uniquecolors[i]]=paste0("tempcolor",count)
+                count=count+1
+        } else{
         number=grep(paste("^",uniquecolors[i],sep=""),ztable::zcolors$name)
         if(length(number)<1) next
         else{
             definition=ztable::zcolors[number[1],3]
             cat(definition,"\n")
         }
+        }
     }
+    attr(mycolors,"no")=count
+    mycolors
+}
+
+
+hex2rgbDef=function(hex="#C90000",no=1){
+    r=hex2decimal(substr(hex,2,3))
+    g=hex2decimal(substr(hex,4,5))
+    b=hex2decimal(substr(hex,6,7))
+    paste0("\\definecolor{tempcolor",no,"}{rgb}{",r,",",g,",",b,"}")
+}
+
+hex2decimal=function(hex="C9"){
+    temp=paste0("0x",hex)
+    round(strtoi(temp)/256,2)
 }
 
