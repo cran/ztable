@@ -1,5 +1,6 @@
 ## ----results='asis'------------------------------------------------------
 library(ztable)
+library(magrittr)
 options(ztable.type="html")
 z=ztable(head(iris))
 z
@@ -9,24 +10,29 @@ z=ztable(head(iris),align="cccccc")
 z
 
 ## ----results='asis'------------------------------------------------------
-require(magrittr)
+z <- ztable(head(iris))
+z <- addRowColor(z, rows=1,bg="#C90000",color="white") 
+print(z)
+
+## ----results='asis'------------------------------------------------------
 ztable(head(iris)) %>%
-    addRowColor(rows=1,color="#C90000") %>%
-    addFrontColor(rows=1,cols=1:6,color="white") %>%
+    addRowColor(rows=1,bg="#C90000",color="white") %>%
     print
 
 
 ## ----results='asis'------------------------------------------------------
 cgroup=c("Sepal","Petal","Species")
 n.cgroup=c(2,2,1)
-z=addcgroup(z,cgroup=cgroup,n.cgroup=n.cgroup)
+z <- ztable(head(iris)) %>%
+    addcgroup(cgroup=cgroup,n.cgroup=n.cgroup)
 z
 
 ## ----results='asis'------------------------------------------------------
 rgroup=c("OneToThree","Four","FiveToSix")
 n.rgroup=c(3,1,2)
 
-z=addrgroup(z,rgroup=rgroup,n.rgroup=n.rgroup,cspan.rgroup=1)
+z <- z %>% 
+    addrgroup(rgroup=rgroup,n.rgroup=n.rgroup,cspan.rgroup=1)
 z
 print(z,type="latex")
 
@@ -37,8 +43,8 @@ z=addSubColNames(z,c(sub,NA))
 z
 
 ## ----results='asis'------------------------------------------------------
-z=spanRow(z,col=2,from=4,to=7,"orange")
-z=spanRow(z,col=3,from=5,to=7,"platinum")
+z=spanRow(z,col=2,from=4,to=7,bg="lightcyan",color="red")
+z=spanRow(z,col=3,from=5,to=7,"platinum","blue")
 z=spanRow(z,col=4,from=6,to=7,"cyan")
 z=spanRow(z,col=5,from=5,to=7,"yellow")
 z=spanRow(z,col=6,from=3,to=5,"yellow")
@@ -50,9 +56,9 @@ z
 
 ## ----results='asis'------------------------------------------------------
 vlines(z,type="all")       # type=1 gets same result
-z=vlines(z,type="none")      # type=0 gets same result
+z <- vlines(z,type="none")      # type=0 gets same result
 z
-z=vlines(z,add=c(1,2,5))
+z <- z %>% vlines(add=c(1,2,5))
 z
 
 ## ----results='asis'------------------------------------------------------
@@ -71,12 +77,14 @@ rgroup=c("Top 1-3","Top 4-5",NA," Top 7-10")
 n.rgroup=c(3,2,1,4)
 z=addrgroup(z,rgroup=rgroup,n.rgroup=n.rgroup,cspan.rgroup=1)
 z
-z=addRowColor(z,c(5,10),"pink")
-z=addColColor(z,4,"amber")
-z=addCellColor(z,rows=c(5,10),cols=4,"orange")
+z <- z %>% 
+    addRowColor(c(5,10),"pink") %>%
+    addColColor(4,"amber") %>%
+    addCellColor(rows=c(5,10),cols=4,"red","white")
 z
-z=spanCol(z,row=2,from=2,to=3,color="lightcyan")
-z=spanRow(z,col=7,from=7,to=8,color="cyan")
+z <- z %>%
+    spanCol(row=2,from=2,to=3,"lightcyan","red") %>%
+    spanRow(col=7,from=7,to=8,"cyan")
 z
 hlines(z,type=1)
 
@@ -130,6 +138,7 @@ out <- glm(status ~ rx+obstruct+adhere+nodes+extent, data=colon, family=binomial
 ztable(out)
 
 ## ----results='asis'------------------------------------------------------
+anova(out)
 ztable(anova(out))
 
 ## ----results='asis'------------------------------------------------------
@@ -254,8 +263,8 @@ vlines(z,type="all")
 ## ----results='asis'------------------------------------------------------
 z=addRowColor(z,c(13,16),"platinum")
 z=addColColor(z,c(5,8),"pink")
-z=addCellColor(z,rows=16,cols=c(5,8),color="orange")
-z=addCellColor(z,rows=13,cols=5,color="orange")
+z=addCellColor(z,rows=16,cols=c(5,8),bg="orange")
+z=addCellColor(z,rows=13,cols=5,bg="orange")
 z
 
 ## ----results='asis'------------------------------------------------------
@@ -266,8 +275,8 @@ z=ztable(res1)
 z %>%
    addRowColor(c(13,16),"platinum") %>%
    addColColor(c(5,8),"pink") %>%
-   addCellColor(rows=16,cols=c(5,8),color="orange") %>%
-   addCellColor(rows=13,cols=5,color="orange") %>%
+   addCellColor(rows=16,cols=c(5,8),bg="orange") %>%
+   addCellColor(rows=13,cols=5,bg="orange") %>%
    print        
 
 ## ----results='asis'------------------------------------------------------
@@ -279,7 +288,7 @@ res1 %>% ztable %>%
 res2<-mytable(sex+DM~.,data=acs)
 res2 %>% 
     ztable %>%
-    addSigColor(sigp=0.01,sigcolor="platinum") %>%
+    addSigColor(level=0.1,bg="yellow",color="red") %>%
     print
 
 

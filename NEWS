@@ -1,3 +1,23 @@
+ztable 0.2.0
+=============
+(22-May-2018)
+
+* New function "ztable.table","gradientColor","makeHeatmap" added
+
+* New vignette "heatmapTable" added
+
+ztable 0.1.9
+=============
+(13-May-2018)
+
+* New function "color2hex", "palette2colors" and "ztable2flextable" added
+
+* "addColColor", "addRowColor" and "addCellColor" function can set background color and font color
+
+* New vignette "ztable_update" added
+
+* Bug-fixed
+
 ztable 0.1.8
 ============
 (24-Apr-2018)
