@@ -4,8 +4,14 @@
 \alias{addCellColor}
 \title{Add column colors of an object of ztable}
 \usage{
-addCellColor(z, rows = NULL, cols = NULL, bg = NULL, color = NULL,
-  condition = NULL)
+addCellColor(
+  z,
+  rows = NULL,
+  cols = NULL,
+  bg = NULL,
+  color = NULL,
+  condition = NULL
+)
 }
 \arguments{
 \item{z}{An object of ztable}
@@ -24,9 +30,11 @@ addCellColor(z, rows = NULL, cols = NULL, bg = NULL, color = NULL,
 Add column colors of an object of ztable
 }
 \examples{
+\dontrun{
 z=ztable(head(iris))
 z=addRowColor(z,c(1,3),color="platinum")
-z=addColColor(z,2,color="syan")
+z=addColColor(z,2,color="cyan")
 z=addCellColor(z,cols=c(5,4),rows=5,color="red")
 z
+}
 }

@@ -310,8 +310,8 @@ myhtmlStyle=function(z){
 #' @param z An object of ztable
 #' @export
 printHTMLHead=function(z){
-    if(is.null(z$cgroup)) return
-    if(is.null(z$n.cgroup)) return
+    if(is.null(z$cgroup)) return()
+    if(is.null(z$n.cgroup)) return()
     #colCount=colGroupCount(z)
     ncount=ncol(z$x)
     addrow=ifelse(z$include.rownames,1,0)
@@ -836,9 +836,11 @@ ztable2html=function(z,xdata){
     cat("</table>\n")
 }
 
-#' Print an object of ztable via rstudio::viewer
+#' Print an object of ztable via rstudioapi::viewer
 #'
 #' @param z An object of ztable
+#' @importFrom rstudioapi viewer
+#' @importFrom utils browseURL
 ztable2viewer=function(z){
     temp.f=tempfile(fileext=".html")
     sink(temp.f)
@@ -854,11 +856,10 @@ ztable2viewer=function(z){
     sink()
 
     viewer <- getOption("viewer")
-    if (!is.null(viewer) &&
-            is.function(viewer)){
-        # (code to write some content to the file)
-        viewer(temp.f)
-    }else{
-        utils::browseURL(temp.f)
+    if (!is.null(viewer)){
+         rstudioapi::viewer(temp.f)
+
+    } else{
+         if(is.character(temp.f)) utils::browseURL(temp.f)
     }
 }

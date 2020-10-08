@@ -97,11 +97,13 @@ addColColor=function(z,cols=NULL,bg=NULL,color=NULL){
 #' @param condition Logical expression to select rows
 #' @export
 #' @examples
+#' \dontrun{
 #' z=ztable(head(iris))
 #' z=addRowColor(z,c(1,3),color="platinum")
-#' z=addColColor(z,2,color="syan")
+#' z=addColColor(z,2,color="cyan")
 #' z=addCellColor(z,cols=c(5,4),rows=5,color="red")
 #' z
+#' }
 addCellColor=function(z,rows=NULL,cols=NULL,bg=NULL,color=NULL,condition=NULL){
     selected=NULL
     selected <- if (!missing(condition)) {
@@ -358,8 +360,8 @@ cGroupSpan=function(z){
 #' @param z An object of ztable
 #' @export
 printLatexHead=function(z){
-    if(is.null(z$cgroup)) return
-    if(is.null(z$n.cgroup)) return
+    if(is.null(z$cgroup)) return()
+    if(is.null(z$n.cgroup)) return()
     #colCount=colGroupCount(z)
     ncount=ncol(z$x)
     addrow=ifelse(z$include.rownames,1,0)
@@ -421,6 +423,7 @@ printLatexHead=function(z){
 #' Calculating total columns of ztable
 #'
 #' @param z An object of ztable
+#' @export
 totalCol=function(z){
     ncount=ncol(z$x)
     addrow=ifelse(z$include.rownames,1,0)
@@ -428,8 +431,10 @@ totalCol=function(z){
     vlines=align2lines(z$align)
     if(!is.null(z$cgroup)) {
         colCount=colGroupCount(z)
+        if(length(colCount)>1){
         for(i in 1:(length(colCount)-1)) {
             if(vlines[colCount[i]+2]==0) result=result+1
+        }
         }
     }
     result

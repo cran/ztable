@@ -4,29 +4,54 @@
 \alias{ztable_sub}
 \title{Exporting "data.frame" to an object of class "ztable"}
 \usage{
-ztable_sub(x, family = NULL, size = 5, color = getOption("ztable.color",
-  "black"), tablewidth = 0.3, type = getOption("ztable.type", "latex"),
+ztable_sub(
+  x,
+  family = NULL,
+  size = 5,
+  color = getOption("ztable.color", "black"),
+  tablewidth = 0.3,
+  type = getOption("ztable.type", "latex"),
   include.rownames = getOption("ztable.include.rownames", TRUE),
-  placement = "!hbtp", position = "c",
+  placement = "!hbtp",
+  position = "c",
   show.heading = getOption("ztable.show.heading", TRUE),
-  show.footer = getOption("ztable.show.footer", TRUE), caption = NULL,
+  show.footer = getOption("ztable.show.footer", TRUE),
+  caption = NULL,
   caption.placement = getOption("ztable.caption.placement", "top"),
   caption.position = getOption("ztable.caption.position", "c"),
-  caption.bold = getOption("ztable.caption.bold", FALSE), align = NULL,
-  digits = NULL, display = NULL, sidewaystable = FALSE,
-  longtable = FALSE, rotate = FALSE, turn = FALSE, angle = 0,
-  wraptable = FALSE, wraptablewidth = 12, tabular = FALSE, label = NULL,
-  hline.after = NULL, booktabs = getOption("ztable.booktabs", TRUE),
-  prefix.rows = NULL, commands = NULL, top.command = NULL,
+  caption.bold = getOption("ztable.caption.bold", FALSE),
+  align = NULL,
+  digits = NULL,
+  display = NULL,
+  sidewaystable = FALSE,
+  longtable = FALSE,
+  rotate = FALSE,
+  turn = FALSE,
+  angle = 0,
+  wraptable = FALSE,
+  wraptablewidth = 12,
+  tabular = FALSE,
+  label = NULL,
+  hline.after = NULL,
+  booktabs = getOption("ztable.booktabs", TRUE),
+  prefix.rows = NULL,
+  commands = NULL,
+  top.command = NULL,
   zebra = getOption("ztable.zebra", NULL),
   zebra.color = getOption("ztable.zebra.color", NULL),
   zebra.type = getOption("ztable.zebra.type", 1),
   zebra.colnames = getOption("ztable.zebra.colnames", FALSE),
   zebra.rownames = getOption("ztable.zebra.rownames", TRUE),
-  zebra.list = NULL, colnames.bold = getOption("ztable.colnames.bold",
-  FALSE), include.colnames = getOption("ztable.include.colnames", TRUE),
-  cgroup = NULL, n.cgroup = NULL, rgroup = NULL, n.rgroup = NULL,
-  cspan.rgroup = NULL, pcol = NULL)
+  zebra.list = NULL,
+  colnames.bold = getOption("ztable.colnames.bold", FALSE),
+  include.colnames = getOption("ztable.include.colnames", TRUE),
+  cgroup = NULL,
+  n.cgroup = NULL,
+  rgroup = NULL,
+  n.rgroup = NULL,
+  cspan.rgroup = NULL,
+  pcol = NULL
+)
 }
 \arguments{
 \item{x}{A data.frame}
@@ -213,6 +238,7 @@ Exporting "data.frame" to an object of class "ztable"
 require(ztable)
 x=head(iris)
 ztable(x)
+\dontrun{
 ztable(x,size=3,caption="Table 1. ztable Test")
 ztable(x,size=7,caption="Table 1. ztable Test",caption.position="l")
 ztable(x,size=7,caption="Table 1. ztable Test",caption.placement="bottom",
@@ -233,4 +259,5 @@ out1=coxph(TS~rx+obstruct+adhere+differ+extent+surg+node4,data=colon)
 ztable(out1)
 ztable(head(mtcars),zebra=1)
 ztable(head(mtcars),zebra=1,zebra.type=2)
+}
 }
